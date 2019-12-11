@@ -1,8 +1,11 @@
-package com.testndk.jnistudy
+package com.testndk.jnistudy.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.testndk.jnistudy.R
+import dalvik.system.DexClassLoader
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +15,9 @@ class MainActivity : AppCompatActivity() {
 
         // Example of a call to a native method
         sample_text.text = stringFromJNI()
+        val dex=File("")
+        val systemResources = DexClassLoader.getSystemResources(dex.absolutePath)
+
     }
 
     /**
