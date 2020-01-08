@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ColumnView">
+        <!--左边图片-->
+        <attr name="left_icon" format="reference|color" />
+        <!--左边图片是否显示-->
+        <attr name="left_icon_visibility">
+            <enum name="visible" value="1" />
+            <enum name="invisible" value="2" />
+        </attr>
+        <!--左边图片宽高-->
+        <attr name="left_icon_size" format="dimension" />
+        <!--左边文字-->
+        <attr name="left_text" format="string" />
+        <!--左边文字颜色-->
+        <attr name="left_text_color" format="color" />
+        <!--左边文字大小-->
+        <attr name="left_text_size" format="dimension" />
+        <!--左边文字是否可见-->
+        <attr name="left_text_visibility">
+            <enum name="visible" value="1" />
+            <enum name="invisible" value="2" />
+        </attr>
+        <!--左边图片-->
+        <attr name="right_icon" format="reference|color" />
+        <!--左边图片是否显示-->
+        <attr name="right_icon_visibility">
+            <enum name="visible" value="1" />
+            <enum name="invisible" value="2" />
+        </attr>
+        <!--左边图片大小-->
+        <attr name="right_icon_size" format="dimension" />
+        <!--右边文字-->
+        <attr name="right_text" format="string" />
+        <!--右边文字颜色-->
+        <attr name="right_text_color" format="reference|color" />
+        <!--右边文字大小-->
+        <attr name="right_text_size" format="dimension" />
+        <!--右边文字显示-->
+        <attr name="right_text_visibility">
+            <enum name="visible" value="1" />
+            <enum name="invisible" value="2" />
+        </attr>
+        <!--控件距离头部-->
+        <attr name="top_padding" format="dimension" />
+        <!--控件距离底部-->
+        <attr name="bottom_padding" format="dimension" />
+        <!--底部线条是否显示-->
+        <attr name="bottom_line_visibility">
+            <enum name="visible" value="1" />
+            <enum name="invisible" value="2" />
+        </attr>
+        <!--底部线条距离边框左边还是右边还是两边-->
+        <attr name="bottom_line_margin">
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+            <enum name="both" value="3" />
+        </attr>
+        <!--底部线条距离宽度-->
+        <attr name="bottom_line_margin_size" format="dimension" />
+        <!--底部线条高度-->
+        <attr name="bottom_line_height" format="dimension" />
+        <!--底部线条背景-->
+        <attr name="bottom_line_bg" format="reference|color" />
+    </declare-styleable>
+
+</resources>

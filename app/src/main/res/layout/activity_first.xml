@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickAndFix"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="AndFix" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickBitmapOption"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="BitmapOption" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickBsdiff"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="Bsdiff" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickFFmpeg"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="FFmpeg" />
+
+    </LinearLayout>
+</ScrollView>
