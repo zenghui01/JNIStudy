@@ -12,5 +12,7 @@ public class MyApplication extends Application {
         super.onCreate();
         INSTANCE = this;
         ScreenUtil.init(this);
+        registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks.getInstance());
+        CrashCollectHandler.Companion.getInstance().init(this);
     }
 }

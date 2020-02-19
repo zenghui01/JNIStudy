@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <string>
 
-#include "art_5_1.h"
+#include "hotfix/art_5_1.h"
 //#include "art_4_4.h"
 
 extern "C" JNIEXPORT jstring JNICALL

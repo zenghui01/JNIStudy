@@ -2,12 +2,17 @@ package com.testndk.jnistudy.ui.weight.edit;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
+
+import com.testndk.jnistudy.R;
 
 public class MapFlashCardEditTextView extends AppCompatEditText {
     MapFlashInputConnection mInputConnection;
@@ -32,8 +37,9 @@ public class MapFlashCardEditTextView extends AppCompatEditText {
 //        setRawInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
 //        setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
         setLongClickable(false);
-        mInputConnection = new MapFlashInputConnection(null, true);
-        mInputConnection.setEditTextView(this);
+        setGravity(Gravity.CENTER);
+//        mInputConnection = new MapFlashInputConnection(null, true);
+//        mInputConnection.setEditTextView(this);
     }
 
     @Override
@@ -42,8 +48,9 @@ public class MapFlashCardEditTextView extends AppCompatEditText {
 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        mInputConnection.setTarget(super.onCreateInputConnection(outAttrs));
-        return mInputConnection;
+
+//        mInputConnection.setTarget(super.onCreateInputConnection(outAttrs));
+        return new TextConnection(this, true);
     }
 
     @Override

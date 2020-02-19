@@ -5,6 +5,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputConnection;
@@ -31,8 +32,14 @@ public class MapFlashInputConnection extends InputConnectionWrapper {
     //正则匹配
     Pattern p = Pattern.compile(matchRule);
 
+    private boolean isWord = false;
+
     public MapFlashInputConnection(InputConnection target, boolean mutable) {
         super(target, mutable);
+    }
+
+    public void log(Object s) {
+        Log.e("testMap:", s.toString());
     }
 
     @Override
@@ -43,6 +50,8 @@ public class MapFlashInputConnection extends InputConnectionWrapper {
     @Override
     public boolean commitText(CharSequence text, int newCursorPosition) {
         //获取的是游标前面所有的数据(游标返回\n)
+        log("commitText:" + text + "   " + newCursorPosition);
+
         try {
             CharSequence textBeforeCursor = getTextBeforeCursor(Integer.MAX_VALUE / 2, 0);
             String data = textBeforeCursor.toString().replace("\n", "");
@@ -512,12 +521,14 @@ public class MapFlashInputConnection extends InputConnectionWrapper {
 
     @Override
     public boolean setComposingRegion(int start, int end) {
+        log("setComposingRegion:" + start + "   " + end);
         return true;
     }
 
 
     @Override
     public boolean setComposingText(CharSequence text, int newCursorPosition) {
+        log("setComposingText:" + text + "    " + newCursorPosition);
         return true;
     }
 
@@ -525,7 +536,9 @@ public class MapFlashInputConnection extends InputConnectionWrapper {
     public boolean finishComposingText() {
         return true;
     }
+    public static class WordBean{
 
+    }
     public static class TextBean {
         private CharSequence content;
         private boolean isNewLine;
