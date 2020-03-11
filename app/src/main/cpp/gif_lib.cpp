@@ -3,8 +3,15 @@
 //
 #include <jni.h>
 #include <string>
-#include "gif/gif_lib.h"
-
+#include "gif_lib.h"
+/**
+ * 数组指针
+ *
+ *
+ * 指针数组
+ *
+ *
+ */
 #define  argb(a, r, g, b) ( ((a) & 0xff) << 24 ) | ( ((b) & 0xff) << 16 ) | ( ((g) & 0xff) << 8 ) | ((r) & 0xff)
 
 typedef struct GifBean {
@@ -69,7 +76,7 @@ void drawFrame(GifFileType *gifFileType, GifBean *gifBean, AndroidBitmapInfo inf
     }
     //偏移指针
     int *px = (int *) pixels;
-    //图像首地址偏移
+    //偏移指针地址
     px = (int *) ((char *) px + info.stride * imageDesc.Top);
 
     int *line;//每一行的首地址

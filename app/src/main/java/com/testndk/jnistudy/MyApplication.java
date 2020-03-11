@@ -2,7 +2,7 @@ package com.testndk.jnistudy;
 
 import android.app.Application;
 
-import com.testndk.jnistudy.ui.utils.ScreenUtil;
+import com.testndk.jnistudy.utils.ScreenUtil;
 
 public class MyApplication extends Application {
     public static MyApplication INSTANCE;

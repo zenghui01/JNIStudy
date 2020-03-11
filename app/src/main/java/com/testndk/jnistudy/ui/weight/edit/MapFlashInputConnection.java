@@ -11,7 +11,7 @@ import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
 
-import com.testndk.jnistudy.ui.utils.ScreenUtil;
+import com.testndk.jnistudy.utils.ScreenUtil;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;

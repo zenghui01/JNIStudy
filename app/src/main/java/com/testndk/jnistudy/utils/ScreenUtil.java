@@ -1,4 +1,4 @@
-package com.testndk.jnistudy.ui.utils;
+package com.testndk.jnistudy.utils;
 
 import android.app.Activity;
 import android.content.Context;

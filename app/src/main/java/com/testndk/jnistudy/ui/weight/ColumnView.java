@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.testndk.jnistudy.R;
-import com.testndk.jnistudy.ui.utils.ScreenUtil;
+import com.testndk.jnistudy.utils.ScreenUtil;
 
 public class ColumnView extends LinearLayout {
     Drawable leftDraw;

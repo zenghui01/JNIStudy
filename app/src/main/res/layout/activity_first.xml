@@ -63,6 +63,7 @@
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
             app:left_text="自定义相机" />
+
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,6 +72,15 @@
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
             app:left_text="Jni加载GIF" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickMergeApk"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="增量更新" />
 
     </LinearLayout>
 </ScrollView>

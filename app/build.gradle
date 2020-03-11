@@ -17,7 +17,11 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
+                abiFilters "armeabi-v7a" //指定目标生成so(该过滤只会影响自己写的lib的生成,生成apk中只会生成指定so,但不会删除原有的第三方so)
             }
+        }
+        ndk {
+            abiFilters("armeabi-v7a")//过滤第三方so库(该过滤会影响到第三方so,让生成的apk中只存在指定过滤so库)
         }
     }
     buildTypes {
@@ -33,19 +37,26 @@ android {
         }
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "io.reactivex.rxjava2:rxjava:2.1.11"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.7"
     implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
     implementation "com.jakewharton.rxbinding2:rxbinding:2.1.1"
     implementation "com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1'
     implementation Commons.fastJson
+    testImplementation TestModel.junit
 }

@@ -5,7 +5,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.testndk.jnistudy.R;
-import com.testndk.jnistudy.ui.utils.ScreenUtil;
+import com.testndk.jnistudy.utils.ScreenUtil;
 
 import java.io.IOException;
 

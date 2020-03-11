@@ -10,8 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 
-import com.alibaba.fastjson.JSON;
-import com.testndk.jnistudy.ui.utils.ScreenUtil;
+import com.testndk.jnistudy.utils.ScreenUtil;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

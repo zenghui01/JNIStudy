@@ -2,7 +2,6 @@ package test;
 
 import android.text.TextUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.testndk.jnistudy.ui.weight.edit.TextConnection;
 
 import org.junit.Test;

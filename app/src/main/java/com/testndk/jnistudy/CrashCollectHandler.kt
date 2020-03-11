@@ -22,15 +22,30 @@ class CrashCollectHandler : Thread.UncaughtExceptionHandler {
 
     //当UncaughtException发生时会转入该函数来处理
     override fun uncaughtException(t: Thread?, e: Throwable?) {
-        if (!handleException(e) && mDefaultHandler != null) {
-            //如果用户没有处理则让系统默认的异常处理器来处理
-            mDefaultHandler?.uncaughtException(t, e)
-        } else {
-            //退出程序
-            MyActivityLifecycleCallbacks.getInstance().clearActivities(null)
-            android.os.Process.killProcess(android.os.Process.myPid())
-            exitProcess(0)
+//        if (!handleException(e) && mDefaultHandler != null) {
+//            //如果用户没有处理则让系统默认的异常处理器来处理
+//            mDefaultHandler?.uncaughtException(t, e)
+//        } else {
+//            //退出程序
+//            try {
+//                //给Toast留出时间
+//                Thread.sleep(2000)
+//            } catch (e: InterruptedException) {
+//                e.printStackTrace()
+//            }
+//            MyActivityLifecycleCallbacks.getInstance().clearActivities(null)
+//            android.os.Process.killProcess(android.os.Process.myPid())
+//            exitProcess(0)
+//        }
+        try {
+            //给Toast留出时间
+            Thread.sleep(2000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
         }
+        MyActivityLifecycleCallbacks.getInstance().clearActivities(null)
+        android.os.Process.killProcess(android.os.Process.myPid())
+        exitProcess(0)
 
     }
 
