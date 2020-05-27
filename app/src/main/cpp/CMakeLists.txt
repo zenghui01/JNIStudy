@@ -49,3 +49,16 @@ target_link_libraries(
         log)
 
 #-------- 增量更新模块 --------------
+
+
+#------------ QQ变声------------------
+add_library(
+        fomd_lib
+        SHARED
+        fomd_lib.cpp
+)
+
+target_link_libraries(
+        fomd_lib
+        log
+)

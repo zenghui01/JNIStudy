@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.View
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.testndk.jnistudy.R
+import com.testndk.jnistudy.annotation.TestAnnotation
 import com.testndk.jnistudy.ui.activity.*
 import com.testndk.jnistudy.utils.isEquals
 
@@ -52,8 +53,9 @@ class FirstActivity : BaseActivity() {
 
     }
 
+    @TestAnnotation
     fun onClickFFmpeg(view: View) {
-
+        start(TestAspectActivity::class.java)
     }
 
     fun onClickEdit(view: View) {
@@ -61,7 +63,6 @@ class FirstActivity : BaseActivity() {
     }
 
     fun onClickCamera(view: View) {
-
         if ((!permissions.isGranted(Manifest.permission.CAMERA) || !permissions.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE)
                     || !permissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE))
         ) {

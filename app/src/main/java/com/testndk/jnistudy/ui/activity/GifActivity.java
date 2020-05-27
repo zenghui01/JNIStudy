@@ -53,7 +53,6 @@ public class GifActivity extends BaseActivity {
         protected Void doInBackground(Void... voids) {
             File file = new File(Environment.getExternalStorageDirectory(), "demo.gif");
             if (!file.exists()) {
-                Toast.makeText(GifActivity.this, "文件不存在", Toast.LENGTH_SHORT).show();
                 return null;
             }
             gIfNativeDecoder = GIfNativeDecoder.loadFile(file.getPath());

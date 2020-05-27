@@ -39,7 +39,7 @@ public class TestClass {
 
     @Test
     public void testa() {
-        System.out.println(8 / 11);
+        System.out.println(0 % 3);
     }
 
     private TextConnection.TextBean toGetOptionBean(int selection) {

@@ -15,6 +15,11 @@ object Commons {
     val fastJson = "com.alibaba:fastjson:1.1.71.android";
 }
 
+object ImageBrowser {
+    val photoView = "com.github.chrisbanes:PhotoView:2.3.0"
+    val subScaleImg = "com.davemorrissey.labs:subsampling-scale-image-view:3.10.0"
+}
+
 object TestModel {
     val junit = "junit:junit:4.12";
 }
