@@ -50,15 +50,29 @@ target_link_libraries(
 
 #-------- 增量更新模块 --------------
 
+#----------测试代码------------
+set(var "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}")
+
+message("var=${var}")
+#----------测试代码------------
+
 
 #------------ QQ变声------------------
+#链接头文件
+include_directories(./fmod_inc)
+#链接动态库
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}")
+
 add_library(
-        fomd_lib
+        fmod_lib
         SHARED
         fomd_lib.cpp
 )
 
 target_link_libraries(
-        fomd_lib
+        fmod_lib
+        fmod
+        fmodL
         log
 )
+#------------ QQ变声------------------

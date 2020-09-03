@@ -87,4 +87,8 @@ class FirstActivity : BaseActivity() {
     fun onClickMergeApk(view: View) {
         start(BsdiffActivity::class.java)
     }
+
+    fun onClickFmod(view: View) {
+        start(FmodActivity::class.java)
+    }
 }
