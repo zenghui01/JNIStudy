@@ -1,6 +1,7 @@
 package com.testndk.jnistudy;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import com.testndk.jnistudy.utils.ScreenUtil;
 

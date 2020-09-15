@@ -53,8 +53,13 @@ class FirstActivity : BaseActivity() {
 
     }
 
-    @TestAnnotation
+
     fun onClickFFmpeg(view: View) {
+        start(FFmpegActivity::class.java)
+    }
+
+    @TestAnnotation
+    fun onClickAspectFirst(view: View) {
         start(TestAspectActivity::class.java)
     }
 

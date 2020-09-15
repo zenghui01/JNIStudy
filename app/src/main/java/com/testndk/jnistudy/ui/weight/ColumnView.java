@@ -152,7 +152,9 @@ public class ColumnView extends LinearLayout {
         mClParent = mView.findViewById(R.id.clParent);
         mTvLine = mView.findViewById(R.id.tvLine);
         //设置左边文字
-        mTvTitle.setText(leftText);
+        if (mTvTitle != null) {
+            mTvTitle.setText(leftText);
+        }
         if (leftTextColor != 0) {
             mTvTitle.setTextColor(leftTextColor);
         }

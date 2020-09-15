@@ -49,11 +49,11 @@
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickFFmpeg"
+            android:onClick="onClickAspectFirst"
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="FFmpeg" />
+            app:left_text="Aspectj" />
 
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
@@ -90,5 +90,14 @@
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
             app:left_text="Fmod变声" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickFFmpeg"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="FFmpeg" />
     </LinearLayout>
 </ScrollView>

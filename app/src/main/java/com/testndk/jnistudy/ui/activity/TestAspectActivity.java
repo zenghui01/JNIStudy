@@ -49,6 +49,5 @@ public class TestAspectActivity extends BaseActivity {
     public void onClickAspect(View view) {
         LogUtils.eLog("sssss");
         ImageBrowserDialog.newInstance().show(getSupportFragmentManager(), "ss");
-
     }
 }
