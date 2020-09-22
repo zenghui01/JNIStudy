@@ -5,7 +5,7 @@
 #ifndef JNISTUDY_BASEJAVACALLBACK_H
 #define JNISTUDY_BASEJAVACALLBACK_H
 
-#include "../macro.h"
+#include "../../macro.h"
 #include <jni.h>
 
 class BaseJavaCallback {

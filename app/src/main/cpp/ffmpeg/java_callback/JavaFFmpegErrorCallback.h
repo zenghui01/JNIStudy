@@ -10,7 +10,7 @@ public:
 
     virtual ~JavaFFmpegErrorCallback();
 
-    void onError(jint code, const char *str);
+    void onError(int method, jint code, const char *str);
 
 private:
     jmethodID jmd_test;

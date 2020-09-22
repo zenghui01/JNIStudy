@@ -10,7 +10,7 @@
 #include "channel/VideoChannel.h"
 #include "channel/AudioChannel.h"
 #include "java_callback/JavaFFmpegCallback.h"
-#include "macro.h"
+#include "../macro.h"
 #include "java_callback/JavaFFmpegErrorCallback.h"
 #include <string.h>
 
@@ -35,20 +35,36 @@ public:
 
     void onError(int code, const char *errorMsg);
 
+    void start();
+
+    void stop();
+
+    void release();
+
+    void player_start();
+
+    void setRenderCallback(RenderCallback renderCallback);
+
 private:
-    char *data_source;
-    char *path = "sdcard/demo.mp4";
-
-    pthread_t pid_prepare{};
-
-    AVFormatContext *formatContext;
-
     VideoChannel *video_channel;
 
     AudioChannel *audio_channel;
 
+    char *data_source;
+
+    pthread_t pid_prepare;
+
+    pthread_t pid_start;
+
     JavaFFmpegCallback *callback = 0;
+
     JavaFFmpegErrorCallback *errorCallback = 0;
+
+    int isPlaying = 0;
+
+    AVFormatContext *avContext;
+
+    RenderCallback  renderCallback;
 };
 
 

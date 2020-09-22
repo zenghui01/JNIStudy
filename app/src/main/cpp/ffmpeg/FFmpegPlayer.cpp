@@ -10,6 +10,12 @@ void *task_prepare(void *args) {
     return 0;
 }
 
+void *task_start(void *args) {
+    auto *player = static_cast<FFmpegPlayer *>(args);
+    player->player_start();
+    return 0;
+}
+
 FFmpegPlayer::FFmpegPlayer(const char *data_source_) {
     //为什么不能使用这种方式赋值? this->data_source=data_source_;
     //由于data_source_有可能被释放掉,导致data_source成为悬空指针,出现异常
@@ -31,19 +37,10 @@ FFmpegPlayer::~FFmpegPlayer() {
     }
 }
 
-void FFmpegPlayer::prepare() {
-    //解封装?用ffmpeg直接解析data_source
-    //可以直接解析么?
-    //要么是文件
-    //要么是直播流
-    //都需要耗时,所以需要异步
-    pthread_create(&pid_prepare, 0, task_prepare, this);
-}
-
 
 void FFmpegPlayer::player_prepare() {
     //1.分配一个影音格式上下文。
-    AVFormatContext *avContext = avformat_alloc_context();
+    avContext = avformat_alloc_context();
     //影音字典
     AVDictionary *avDictionary = 0;
     //字典中设置值
@@ -112,9 +109,10 @@ void FFmpegPlayer::player_prepare() {
        * 10, 从编码器参数中获取流类型 codec_type
        */
         if (codecParameters->codec_type == AVMEDIA_TYPE_AUDIO) {
-            audio_channel = new AudioChannel();
+            audio_channel = new AudioChannel(i, avCodecContext);
         } else if (codecParameters->codec_type == AVMEDIA_TYPE_VIDEO) {
-            video_channel = new VideoChannel();
+            video_channel = new VideoChannel(i, avCodecContext);
+            video_channel->setRenderCallback(renderCallback);
         }
     }
     if (!audio_channel && !video_channel) {
@@ -130,10 +128,63 @@ void FFmpegPlayer::player_prepare() {
 
 }
 
+void FFmpegPlayer::player_start() {
+    while (isPlaying) {
+        AVPacket *packet = av_packet_alloc();
+        int ret = av_read_frame(avContext, packet);
+        if (!ret) {
+            if (video_channel && video_channel->streamIndex == packet->stream_index) {
+                video_channel->packets.push(packet);
+            } else if (audio_channel && audio_channel->streamIndex == packet->stream_index) {
+                audio_channel->packets.push(packet);
+            } else if (ret == AVERROR_EOF) {
+                //已经读完了,要考虑是否播放完
+            } else {
+                break;
+            }
+        }
+    }
+    isPlaying = 0;
+    video_channel->stop();
+    audio_channel->stop();
+}
+
+void FFmpegPlayer::prepare() {
+    //解封装?用ffmpeg直接解析data_source
+    //可以直接解析么?
+    //要么是文件
+    //要么是直播流
+    //都需要耗时,所以需要异步
+    pthread_create(&pid_prepare, 0, task_prepare, this);
+}
+
+
+void FFmpegPlayer::start() {
+    isPlaying = 1;
+    if (video_channel) {
+        LOGE("video channel 不为空启动packet转换");
+        video_channel->start();
+    }
+    if (audio_channel) {
+        audio_channel->start();
+    }
+    //开始播放需要对视频avparket进行解析,属于耗时操作所以放在子线程中
+    pthread_create(&pid_start, 0, task_start, this);
+}
+
+void FFmpegPlayer::stop() {
+
+}
+
+void FFmpegPlayer::release() {
+
+}
+
+
 void FFmpegPlayer::onError(jint code, const char *errorMsg) {
     LOGE("准备调用onError方法");
     if (errorCallback) {
-        errorCallback->onError(code, errorMsg);
+        errorCallback->onError(THREAD_CHILD, code, errorMsg);
     }
 }
 
@@ -145,4 +196,8 @@ void FFmpegPlayer::setFFmpegCallback(JavaFFmpegCallback *callback) {
 void FFmpegPlayer::setFFmpegErrorCallback(JavaFFmpegErrorCallback *errorCallback) {
     LOGE("设置加载错误监听");
     this->errorCallback = errorCallback;
+}
+
+void FFmpegPlayer::setRenderCallback(RenderCallback renderCallback) {
+    this->renderCallback = renderCallback;
 }

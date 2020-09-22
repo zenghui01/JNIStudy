@@ -1,5 +1,18 @@
 cmake_minimum_required(VERSION 3.4.1)
 
+#----------签名测试模块---------------
+include_directories(./apk_signature)
+
+add_library(
+        apkSign-lib
+        SHARED
+        ./apk_signature/apk_signature_lib.cpp
+)
+
+target_link_libraries(
+        apkSign-lib
+        log)
+#----------签名测试模块---------------
 #----------热修复模块---------------
 include_directories(./hotfix)
 
@@ -104,5 +117,7 @@ target_link_libraries(
         -Wl,--end-group
         log
         z
+        android
+        OpenSLES
 )
 #------------- ffmpeg-----------------

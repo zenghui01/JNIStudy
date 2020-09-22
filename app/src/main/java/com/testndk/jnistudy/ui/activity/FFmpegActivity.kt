@@ -2,6 +2,7 @@ package com.testndk.jnistudy.ui.activity
 
 import android.os.Environment
 import android.text.TextUtils
+import android.view.SurfaceView
 import android.widget.TextView
 import com.testndk.jnistudy.R
 import com.testndk.jnistudy.ui.ffmpeg.FFmpegPlayer
@@ -24,10 +25,12 @@ class FFmpegActivity : BaseActivity() {
             toast("视频文件异常")
             return
         }
-        findViewById<TextView>(R.id.tvVersion).text = filePath
+        val view=findViewById<SurfaceView>(R.id.surface);
+        fFmpegPlayer.setSurface(view)
         fFmpegPlayer.setDataSource(filePath)
         fFmpegPlayer.setPrepareListener {
             toast("加载成功")
+            fFmpegPlayer.start()
         }
         fFmpegPlayer.setErrorListener { errorCode, errorMsg ->
             toast(errorMsg)

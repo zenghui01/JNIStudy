@@ -8,12 +8,38 @@
 
 #include "BaseChannel.h"
 
-class VideoChannel : BaseChannel {
+extern "C" {
+#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
+};
+
+typedef void (*RenderCallback)(uint8_t *, int, int, int);
+
+class VideoChannel : public BaseChannel {
+
 public:
-    VideoChannel();
+    VideoChannel(int streamIndex, AVCodecContext *pContext);
 
     virtual ~VideoChannel();
 
+    void start();
+
+    void stop();
+
+    void release();
+
+    void videoDecode();
+
+    void videoPlay();
+
+    void setRenderCallback(RenderCallback renderCallback);
+
+private:
+    pthread_t thread_video_decode;
+    pthread_t thread_video_play;
+    int isPlaying;
+
+    RenderCallback renderCallback;
 };
 
 

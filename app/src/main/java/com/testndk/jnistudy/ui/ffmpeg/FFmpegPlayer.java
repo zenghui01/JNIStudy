@@ -1,11 +1,18 @@
 package com.testndk.jnistudy.ui.ffmpeg;
 
 
-import com.testndk.jnistudy.utils.LogUtils;
+import android.content.Context;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
-public class FFmpegPlayer {
+import com.testndk.jnistudy.utils.LogUtils;
+import com.testndk.jnistudy.utils.ScreenUtil;
+
+public class FFmpegPlayer implements SurfaceHolder.Callback {
     static {
         System.loadLibrary("ffmpeg_lib");
+//        System.loadLibrary("apkSign-lib");
     }
 
     public native static String getVersion();
@@ -13,6 +20,9 @@ public class FFmpegPlayer {
     private OnPrepareListener mPrepareListener;
 
     private OnErrorListener mErrorListener;
+
+    public SurfaceHolder surfaceHolder;
+
 
     public FFmpegPlayer() {
     }
@@ -38,7 +48,7 @@ public class FFmpegPlayer {
     }
 
     public void start() {
-
+        startNative();
     }
 
     public void stop() {
@@ -64,10 +74,12 @@ public class FFmpegPlayer {
         LogUtils.eLog("测试jni回调java", "onTest", errorMsg);
     }
 
-    private int onTestReturn(int errorCode, String errorMsg ){
+    private int onTestReturn(int errorCode, String errorMsg) {
         LogUtils.eLog("测试jni回调java", "onTestReturn", errorCode, errorMsg);
         return errorCode;
     }
+
+//    public static native boolean checkSign(Context context);
 
     /**
      * jni反射调用
@@ -76,6 +88,34 @@ public class FFmpegPlayer {
         if (null != mPrepareListener) {
             mPrepareListener.onPrepare();
         }
+    }
+
+
+    public void setSurface(SurfaceView surface) {
+        if (surfaceHolder != null) {
+            surfaceHolder.removeCallback(this);
+        }
+        surfaceHolder = surface.getHolder();
+        LogUtils.eLog("setSurface");
+        // TODO: 2020/9/21 不回调 surfaceChanged???
+        setSurfaceNative(surfaceHolder.getSurface());
+    }
+
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        LogUtils.eLog("surfaceCreated");
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        LogUtils.eLog("surfaceChanged");
+        setSurfaceNative(holder.getSurface());
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        LogUtils.eLog("surfaceDestroyed");
     }
 
     public interface OnPrepareListener {
@@ -93,4 +133,6 @@ public class FFmpegPlayer {
     private native void stopNative();
 
     private native void releaseNative();
+
+    private native void setSurfaceNative(Surface surface);
 }

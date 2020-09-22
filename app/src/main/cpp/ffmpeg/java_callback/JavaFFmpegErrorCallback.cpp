@@ -1,31 +1,33 @@
 #include "JavaFFmpegErrorCallback.h"
 
-void JavaFFmpegErrorCallback::onError(jint code, const char *str) {
+void JavaFFmpegErrorCallback::onError(int method, jint code, const char *str) {
+    if (method == THREAD_MAIN) {
+        jstring data = env->NewStringUTF(str);
 
-//    LOGE("调用");
-//    JNIEnv *child_env;
-//    javaVM->AttachCurrentThread(&child_env, 0);
-//    child_env->CallObjectMethod(instance, jmd_prepared, str);
-//    javaVM->DetachCurrentThread();
-//    char *data_source = new char[strlen(str) + 1];
-//    //将值copy到data_source中
-//    strcpy(data_source, str);
+        env->CallVoidMethod(instance, jmd_test, data);
 
-    JNIEnv *child_env;
+        env->CallVoidMethod(instance, jmd_jni_error, code, data);
 
-    javaVM->AttachCurrentThread(&child_env, 0);
+        env->CallVoidMethod(instance, jmd_test_boolean, false, data);
 
-    jstring data = child_env->NewStringUTF(str);
+        env->CallIntMethod(instance, jmd_test_return, code, data);
+    } else if (method == THREAD_CHILD) {
+        JNIEnv *child_env;
 
-    child_env->CallVoidMethod(instance, jmd_test, data);
+        javaVM->AttachCurrentThread(&child_env, 0);
 
-    child_env->CallVoidMethod(instance, jmd_jni_error, code, data);
+        jstring data = child_env->NewStringUTF(str);
 
-    child_env->CallVoidMethod(instance, jmd_test_boolean, false, data);
+        child_env->CallVoidMethod(instance, jmd_test, data);
 
-    child_env->CallIntMethod(instance, jmd_test_return, code, data);
+        child_env->CallVoidMethod(instance, jmd_jni_error, code, data);
 
-    javaVM->DetachCurrentThread();
+        child_env->CallVoidMethod(instance, jmd_test_boolean, false, data);
+
+        child_env->CallIntMethod(instance, jmd_test_return, code, data);
+
+        javaVM->DetachCurrentThread();
+    }
 }
 
 JavaFFmpegErrorCallback::~JavaFFmpegErrorCallback() {
