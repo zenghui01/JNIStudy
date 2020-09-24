@@ -5,8 +5,9 @@
 
 #include "AudioChannel.h"
 
-AudioChannel::AudioChannel(int streamIndex, AVCodecContext *codecContext) : BaseChannel(streamIndex,
-                                                                                        codecContext) {
+AudioChannel::AudioChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_)
+        : BaseChannel(streamIndex,
+                      codecContext, time_base_) {
     //初始化缓存区 out_buffers,如何设置缓冲区大小呢?
     //目标初始话参数 采样率 44100 采样格式16bits(位)=2个字节(1个字节八位) 声道数 2
     //AV_CH_LAYOUT_STEREO 声道类型
@@ -60,20 +61,21 @@ void AudioChannel::start() {
 }
 
 void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *args) {
-    LOGE("bqPlayerCallback");
     AudioChannel *audio_channel = static_cast<AudioChannel *>(args);
     int pcm_size = audio_channel->getPCMSize();
-    (*bq)->Enqueue(bq, audio_channel->out_buffers, pcm_size);
+    if (pcm_size > 0) {
+        (*bq)->Enqueue(bq, audio_channel->out_buffers, pcm_size);
+    }
 }
 
 int AudioChannel::getPCMSize() {
-    LOGE("getPCMSize");
     //获取pcm
     int pcm_data_size = 0;
     //获取pcm
     //PCM在哪里？frames队列中 : frame->data
     AVFrame *frame = 0;
     while (isPlaying) {
+        //取出一针
         int ret = frames.pop(frame);
         if (!isPlaying) {
             //如果停止播放了，跳出循环, 释放 frame
@@ -93,17 +95,13 @@ int AudioChannel::getPCMSize() {
         int samples_per_channel = swr_convert(swr_ctx, &out_buffers, dst_nb_samples,
                                               (const uint8_t **) frame->data,
                                               frame->nb_samples);
-        pcm_data_size = samples_per_channel * out_sample_size;//每个声道的数据个数
-//        pcm_data_size = samples_per_channel * out_sample_size * out_channels;
-//        //25fps 1秒25帧，每帧是 1/25 秒
-//
-//        //每一帧音频的时间
-//        audio_time = frame->best_effort_timestamp * av_q2d(time_base);//时间有单位，Timebase 时间基
-//        //audio_time 就是 Java 层 想要的 progress
-//        if (jni_callback_helper) {
-//            jni_callback_helper->onProgress(THREAD_CHILD, audio_time);
-//        }
-
+//        pcm_data_size = samples_per_channel * out_sample_size ;//每个声道的数据个数
+        pcm_data_size = samples_per_channel * out_sample_size * out_channels;//所有声道完整数据
+        //25fps 1秒25帧   每帧1/25秒
+        //用于获取fps  av_q2d
+        //time_base 就是从流中取到的AVRational,在AVRational中有帧数分子与时间基数分子
+        // frame->best_effort_timestamp * av_q2d(time_base) 获取到每帧音频的时间戳
+        audio_time = frame->best_effort_timestamp * av_q2d(time_base);
         break;
     }//end while
     releaseAvFrame(&frame);
@@ -114,6 +112,10 @@ int AudioChannel::getPCMSize() {
 void AudioChannel::audioDecode() {
     AVPacket *packet = 0;
     while (isPlaying == 1) {
+        if (frames.size() > 100) {
+            av_usleep(10 * 1000);//microseconds
+            continue;
+        }
         //从队列中取出带解码包
         int ret = packets.pop(packet);
         //如果停止播放,跳出循环并且释放packet
@@ -127,7 +129,6 @@ void AudioChannel::audioDecode() {
         ret = avcodec_send_packet(codecContext, packet);
         //0表示成功
         if (ret) {
-            LOGE("获取解码包失败");
             break;
         }
         releaseAvPacket(&packet);//packet 不需要了 可以释放
@@ -137,13 +138,13 @@ void AudioChannel::audioDecode() {
             //如果报错是eagain放弃当前帧,尝试取下一帧
             continue;
         } else if (ret != 0) {
-            LOGE("跳出4%s", av_err2str(AVERROR(ret)));
+            //出现异常跳出循环,直接释放该帧
+            releaseAvFrame(&frame);
             break;
         }
         //取到视频帧后加入到视频帧队列,
         frames.push(frame);
     }
-    LOGE("释放解码包");
     releaseAvPacket(&packet);
 }
 

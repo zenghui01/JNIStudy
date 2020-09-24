@@ -16,7 +16,7 @@ extern "C" {
 
 class AudioChannel : public BaseChannel {
 public:
-    AudioChannel(int streamIndex, AVCodecContext *codecContext);
+    AudioChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_);
 
     virtual ~AudioChannel();
 
@@ -42,6 +42,8 @@ public:
     int out_sample_rate = 0;
     //输出缓冲区大小
     int out_buffers_size = 0;
+    //音频每一帧的时间戳
+    double audio_time;
 private:
     pthread_t thread_audio_decode;
     pthread_t thread_audio_play;

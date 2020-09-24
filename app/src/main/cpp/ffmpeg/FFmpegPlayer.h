@@ -16,6 +16,7 @@
 
 extern "C" {
 #include <libavformat/avformat.h>
+#include <libavutil/time.h>
 };
 
 
@@ -46,25 +47,34 @@ public:
     void setRenderCallback(RenderCallback renderCallback);
 
 private:
+    //视频解码通道
     VideoChannel *video_channel;
-
+    //音频解码通道
     AudioChannel *audio_channel;
-
+    //输入源地址
     char *data_source;
-
+    //prepare(加载视频)是耗时操作,放在子线程中,pid_prepare 线程id
     pthread_t pid_prepare;
-
+    //start(开始播放)是耗时操作,放在子线程中,pid_start 线程id
     pthread_t pid_start;
-
+    //加载视频成功回调
     JavaFFmpegCallback *callback = 0;
-
+    /**
+     * 加载视频异常回调
+     */
     JavaFFmpegErrorCallback *errorCallback = 0;
-
+    /**
+     * 是否在播放,用于控制音视频解码
+     */
     int isPlaying = 0;
-
+    /**
+     * 加载音视频包,上下文
+     */
     AVFormatContext *avContext;
-
-    RenderCallback  renderCallback;
+    /**
+     * 视频解码成frame后,绘制到window
+     */
+    RenderCallback renderCallback;
 };
 
 

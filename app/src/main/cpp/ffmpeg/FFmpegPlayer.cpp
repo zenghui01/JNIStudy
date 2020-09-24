@@ -2,6 +2,7 @@
 // Created by zenghui on 2020/9/9.
 //
 
+
 #include "FFmpegPlayer.h"
 
 void *task_prepare(void *args) {
@@ -55,14 +56,12 @@ void FFmpegPlayer::player_prepare() {
     int retCode = avformat_open_input(&avContext, this->data_source, 0, &avDictionary);
     //释放已用完字典
     av_dict_free(&avDictionary);
-    LOGE("sss1");
     if (retCode) {
         //如果retcode不等于0返回报错
         //源码提示:@return 0 on success, a negative AVERROR on failure.
         onError(retCode, av_err2str(retCode));
         return;
     }
-    LOGE("sss2");
     retCode = avformat_find_stream_info(avContext, 0);
     if (retCode < 0) {
         //如果返回值小于0返回报错
@@ -70,11 +69,10 @@ void FFmpegPlayer::player_prepare() {
         onError(retCode, av_err2str(retCode));
         return;
     }
-    LOGE("sss3");
     //轮询avFormatContext中的流个数
-    for (int i = 0; i < avContext->nb_streams; ++i) {
+    for (int stream_index = 0; stream_index < avContext->nb_streams; ++stream_index) {
         //获取avFormatContext中的流
-        AVStream *stream = avContext->streams[i];
+        AVStream *stream = avContext->streams[stream_index];
         //获取流中的解码器参数
         AVCodecParameters *codecParameters = stream->codecpar;
         //获取流解码器
@@ -109,9 +107,14 @@ void FFmpegPlayer::player_prepare() {
        * 10, 从编码器参数中获取流类型 codec_type
        */
         if (codecParameters->codec_type == AVMEDIA_TYPE_AUDIO) {
-            audio_channel = new AudioChannel(i, avCodecContext);
+            audio_channel = new AudioChannel(stream_index, avCodecContext, stream->time_base);
         } else if (codecParameters->codec_type == AVMEDIA_TYPE_VIDEO) {
-            video_channel = new VideoChannel(i, avCodecContext);
+            //从流中获取平均帧率
+            AVRational frame_rate = stream->avg_frame_rate;
+            //根据帧率获取到fps
+            double fps = av_q2d(frame_rate);
+            video_channel = new VideoChannel(stream_index, avCodecContext, stream->time_base);
+            video_channel->setFPS(fps);
             video_channel->setRenderCallback(renderCallback);
         }
     }
@@ -130,6 +133,18 @@ void FFmpegPlayer::player_prepare() {
 
 void FFmpegPlayer::player_start() {
     while (isPlaying) {
+        //对视频包队列进行管理,避免packets无限增加导致奔溃
+        if (video_channel && video_channel->packets.size() > 100) {
+            //如果队列视频包超过100休眠10ms
+            av_usleep(10 * 1000);//microseconds
+            continue;
+        }
+        //对音频包队列进行管理,避免packets无限增加导致奔溃
+        if (audio_channel && audio_channel->packets.size() > 100) {
+            //如果队列视频包超过100休眠10ms
+            av_usleep(10 * 1000);//microseconds
+            continue;
+        }
         AVPacket *packet = av_packet_alloc();
         int ret = av_read_frame(avContext, packet);
         if (!ret) {
@@ -163,6 +178,7 @@ void FFmpegPlayer::start() {
     isPlaying = 1;
     if (video_channel) {
         LOGE("video channel 不为空启动packet转换");
+        video_channel->setAudioChannel(audio_channel);
         video_channel->start();
     }
     if (audio_channel) {
@@ -177,7 +193,6 @@ void FFmpegPlayer::stop() {
 }
 
 void FFmpegPlayer::release() {
-
 }
 
 
