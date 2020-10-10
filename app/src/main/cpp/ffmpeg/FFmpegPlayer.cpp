@@ -109,6 +109,12 @@ void FFmpegPlayer::player_prepare() {
         if (codecParameters->codec_type == AVMEDIA_TYPE_AUDIO) {
             audio_channel = new AudioChannel(stream_index, avCodecContext, stream->time_base);
         } else if (codecParameters->codec_type == AVMEDIA_TYPE_VIDEO) {
+            //            stream->attached_pic;// 封面图像数据
+            if (stream->disposition & AV_DISPOSITION_ATTACHED_PIC) {
+                //如果这个标记是 附加图
+                //过滤当前的封面视频流
+                continue;
+            }
             //从流中获取平均帧率
             AVRational frame_rate = stream->avg_frame_rate;
             //根据帧率获取到fps
