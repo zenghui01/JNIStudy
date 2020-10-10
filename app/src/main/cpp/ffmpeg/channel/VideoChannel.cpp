@@ -89,9 +89,9 @@ void VideoChannel::videoPlay() {
         //额外延迟时间
         double extra_delay = frame->repeat_pict / (2 * fps);
         //根据fps获取延迟时间
-        double base_delay = 1.0 / fps;//fps秒
+//        double base_delay = 1.0 / fps;//fps秒
         //获取到真正的延迟时间
-        double real_delay = base_delay + extra_delay;
+        double real_delay = frame_delay + extra_delay;
 
         //视频每一帧的时间戳
         double video_time = frame->best_effort_timestamp * av_q2d(time_base);
@@ -195,6 +195,10 @@ void VideoChannel::setFPS(double fps) {
 
 void VideoChannel::setAudioChannel(AudioChannel *audioChannel) {
     this->audioChannel = audioChannel;
+}
+
+void VideoChannel::setFrameDelayTime(int delay) {
+    frame_delay = delay;
 }
 
 

@@ -37,6 +37,8 @@ public:
 
     void setFPS(double fps);
 
+    void setFrameDelayTime(int delay);
+
     void setAudioChannel(AudioChannel *audioChannel);
 
     void callbackProgress(int duration);
@@ -53,6 +55,8 @@ private:
     AudioChannel *audioChannel = 0;
 
     int curDuration = -1;
+
+    int frame_delay = 0;
 
     double fps;
 };
