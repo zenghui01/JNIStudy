@@ -41,8 +41,6 @@ public:
 
     void callbackProgress(int duration);
 
-    void setIsPlaying();
-
 private:
     pthread_t thread_video_decode;
 

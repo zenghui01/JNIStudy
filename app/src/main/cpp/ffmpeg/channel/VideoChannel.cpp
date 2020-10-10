@@ -49,9 +49,9 @@ void VideoChannel::release() {
 }
 
 void VideoChannel::callbackProgress(int duration) {
-//    if (curDuration == duration) {
-//        return;
-//    }
+    if (curDuration == duration) {
+        return;
+    }
     curDuration = duration;
     if (progressCallback) {
         progressCallback->onProgress(THREAD_CHILD, duration);
