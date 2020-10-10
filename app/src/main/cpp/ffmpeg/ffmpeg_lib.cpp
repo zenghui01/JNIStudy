@@ -62,13 +62,23 @@ Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_prepareNative(JNIEnv *env, jobj
     LOGE("视频地址:%s", data_source);
     auto *ffCallBack = new JavaFFmpegCallback(javaVM, env, thiz_);
     auto *ffErrorCallback = new JavaFFmpegErrorCallback(javaVM, env, thiz_);
+    auto *ffProgressCallback = new JavaFFmpegProgressCallback(javaVM, env, thiz_);
     player = new FFmpegPlayer(data_source);
     player->setFFmpegCallback(ffCallBack);
     player->setFFmpegErrorCallback(ffErrorCallback);
+    player->setProgressCallback(ffProgressCallback);
     player->setRenderCallback(renderFrame);
     player->prepare();
 }
 
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_getDurationNative(JNIEnv *env, jobject thiz) {
+    if (!player) {
+        return -1;
+    }
+    return player->getDuration();
+}
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_startNative(JNIEnv *env, jobject thiz) {
@@ -103,4 +113,13 @@ Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_setSurfaceNative(JNIEnv *env, j
     }
     window = ANativeWindow_fromSurface(env, surface);
     pthread_mutex_unlock(&mutex);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_onSeekNative(JNIEnv *env, jobject thiz,
+                                                              jint duration) {
+    if (player) {
+        player->onSeek(duration);
+    }
 }

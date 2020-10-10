@@ -46,6 +46,12 @@ public:
 
     void setRenderCallback(RenderCallback renderCallback);
 
+    void onSeek(int duration);
+
+    void setProgressCallback(JavaFFmpegProgressCallback *progressCallback);
+
+    int getDuration();
+
 private:
     //视频解码通道
     VideoChannel *video_channel;
@@ -63,6 +69,11 @@ private:
      * 加载视频异常回调
      */
     JavaFFmpegErrorCallback *errorCallback = 0;
+
+    /**
+    * 加载视频异常回调
+    */
+    JavaFFmpegProgressCallback *progressCallback = 0;
     /**
      * 是否在播放,用于控制音视频解码
      */
@@ -75,6 +86,9 @@ private:
      * 视频解码成frame后,绘制到window
      */
     RenderCallback renderCallback;
+
+    pthread_mutex_t seek_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 };
 
 

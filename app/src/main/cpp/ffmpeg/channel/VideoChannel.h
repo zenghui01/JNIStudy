@@ -37,16 +37,24 @@ public:
 
     void setFPS(double fps);
 
-    void setAudioChannel(AudioChannel* audioChannel);
+    void setAudioChannel(AudioChannel *audioChannel);
+
+    void callbackProgress(int duration);
+
+    void setIsPlaying();
 
 private:
     pthread_t thread_video_decode;
+
     pthread_t thread_video_play;
+
     int isPlaying;
 
     RenderCallback renderCallback;
 
     AudioChannel *audioChannel = 0;
+
+    int curDuration = -1;
 
     double fps;
 };

@@ -12,6 +12,7 @@ extern "C" {
 #include "../safe_queue.h"
 #include "../macro.h"
 #include <pthread.h>
+#include "../java_callback/JavaFFmpegProgressCallback.h"
 
 class BaseChannel {
 public:
@@ -33,6 +34,28 @@ public:
         frames.clear();
     }
 
+    //只要出现音频快于视频,就会调用该方法
+    static void dropAvFrame(queue<AVFrame *> &frames) {
+        if (!frames.empty()) {
+            AVFrame *frame = frames.front();
+            BaseChannel::releaseAvFrame(&frame);
+            frames.pop();
+        }
+    }
+
+    //只要出现音频快于视频,就会调用该方法
+    static void dropAvPackets(queue<AVPacket *> &packets) {
+        //当不为空是,遇到关键帧跳出循环,非关键帧直接丢弃
+        while (!packets.empty()) {
+            AVPacket *packet = packets.front();
+            if (packet->flags == AV_PKT_FLAG_KEY) {
+                break;
+            }
+            BaseChannel::releaseAvPacket(&packet);
+            packets.pop();
+        }
+    }
+
     static void releaseAvPacket(AVPacket **packet) {
         if (packet) {
             av_packet_free(packet);
@@ -47,11 +70,17 @@ public:
         }
     }
 
+
+    void setProgressCallback(JavaFFmpegProgressCallback *progressCallback) {
+        this->progressCallback = progressCallback;
+    }
+
     int streamIndex;
     SafeQueue<AVFrame *> frames;//帧包
     SafeQueue<AVPacket *> packets; //码流包
     AVCodecContext *codecContext;
     AVRational time_base;
+    JavaFFmpegProgressCallback *progressCallback;
 };
 
 

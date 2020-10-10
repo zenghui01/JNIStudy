@@ -1,23 +1,22 @@
 package com.testndk.jnistudy.ui.ffmpeg;
 
 
-import android.content.Context;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.testndk.jnistudy.utils.LogUtils;
-import com.testndk.jnistudy.utils.ScreenUtil;
 
 public class FFmpegPlayer implements SurfaceHolder.Callback {
     static {
         System.loadLibrary("ffmpeg_lib");
-//        System.loadLibrary("apkSign-lib");
     }
 
     public native static String getVersion();
 
     private OnPrepareListener mPrepareListener;
+
+    private OnProgressListener mProgressListener;
 
     private OnErrorListener mErrorListener;
 
@@ -43,6 +42,10 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
         this.mErrorListener = mErrorListener;
     }
 
+    public void setProgressListener(OnProgressListener mProgressListener) {
+        this.mProgressListener = mProgressListener;
+    }
+
     public void prepare() {
         prepareNative(dataSource);
     }
@@ -58,6 +61,11 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
     public void release() {
 
     }
+
+    public int getDuration() {
+        return getDurationNative();
+    }
+
 
     private void onJniError(int errorCode, String errorMsg) {
         LogUtils.eLog("测试jni回调java", "onJniError", errorCode, errorMsg);
@@ -81,15 +89,25 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
 
 //    public static native boolean checkSign(Context context);
 
+    public void onSeek(int duration) {
+        onSeekNative(duration);
+    }
+
     /**
      * jni反射调用
      */
     private void onJniPrepared() {
         if (null != mPrepareListener) {
-            mPrepareListener.onPrepare();
+            mPrepareListener.onPrepare(getDuration());
         }
     }
 
+    private void onJniProgress(int duration) {
+        LogUtils.eLog("onJniProgress", duration);
+        if (null != mProgressListener) {
+            mProgressListener.onProgress(duration);
+        }
+    }
 
     public void setSurface(SurfaceView surface) {
         if (surfaceHolder != null) {
@@ -109,7 +127,6 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        LogUtils.eLog("surfaceChanged");
         setSurfaceNative(holder.getSurface());
     }
 
@@ -119,11 +136,15 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
     }
 
     public interface OnPrepareListener {
-        void onPrepare();
+        void onPrepare(int duration);
     }
 
     public interface OnErrorListener {
         void onError(int errorCode, String errorMsg);
+    }
+
+    public interface OnProgressListener {
+        void onProgress(int progress);
     }
 
     private native void prepareNative(String dataSource);
@@ -135,4 +156,8 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
     private native void releaseNative();
 
     private native void setSurfaceNative(Surface surface);
+
+    private native void onSeekNative(int duration);
+
+    private native int getDurationNative();
 }

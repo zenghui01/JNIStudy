@@ -146,7 +146,9 @@ void FFmpegPlayer::player_start() {
             continue;
         }
         AVPacket *packet = av_packet_alloc();
+        pthread_mutex_lock(&seek_mutex);
         int ret = av_read_frame(avContext, packet);
+        pthread_mutex_unlock(&seek_mutex);
         if (!ret) {
             if (video_channel && video_channel->streamIndex == packet->stream_index) {
                 video_channel->packets.push(packet);
@@ -154,6 +156,7 @@ void FFmpegPlayer::player_start() {
                 audio_channel->packets.push(packet);
             } else if (ret == AVERROR_EOF) {
                 //已经读完了,要考虑是否播放完
+
             } else {
                 break;
             }
@@ -180,9 +183,11 @@ void FFmpegPlayer::start() {
         LOGE("video channel 不为空启动packet转换");
         video_channel->setAudioChannel(audio_channel);
         video_channel->start();
+        video_channel->setProgressCallback(progressCallback);
     }
     if (audio_channel) {
         audio_channel->start();
+        audio_channel->setProgressCallback(progressCallback);
     }
     //开始播放需要对视频avparket进行解析,属于耗时操作所以放在子线程中
     pthread_create(&pid_start, 0, task_start, this);
@@ -215,4 +220,63 @@ void FFmpegPlayer::setFFmpegErrorCallback(JavaFFmpegErrorCallback *errorCallback
 
 void FFmpegPlayer::setRenderCallback(RenderCallback renderCallback) {
     this->renderCallback = renderCallback;
+}
+
+void FFmpegPlayer::onSeek(int duration) {
+    if (!avContext) {
+
+        return;
+    }
+    if (duration < 0 || duration > this->getDuration()) {
+        return;
+    }
+    if (!audio_channel && !video_channel) {
+        return;
+    }
+    LOGE("没有异常%d", duration);
+    pthread_mutex_lock(&seek_mutex);
+    int ret = av_seek_frame(avContext, -1, duration * AV_TIME_BASE,
+                            AVSEEK_FLAG_BACKWARD);
+    if (ret < 0) {
+        LOGE("拖拽调整进度失败");
+        pthread_mutex_unlock(&seek_mutex);
+        return;
+    }
+    if (audio_channel) {
+//        avcodec_flush_buffers(audio_channel->codecContext);
+        audio_channel->packets.setWorking(0);
+        audio_channel->frames.setWorking(0);
+
+        audio_channel->packets.clear();
+        audio_channel->frames.clear();
+
+        audio_channel->packets.setWorking(1);
+        audio_channel->frames.setWorking(1);
+    }
+
+    if (video_channel) {
+//        avcodec_flush_buffers(video_channel->codecContext);
+        video_channel->packets.setWorking(0);
+        video_channel->frames.setWorking(0);
+
+        video_channel->packets.clear();
+        video_channel->frames.clear();
+
+        video_channel->packets.setWorking(1);
+        video_channel->frames.setWorking(1);
+    }
+
+    pthread_mutex_unlock(&seek_mutex);
+}
+
+void FFmpegPlayer::setProgressCallback(JavaFFmpegProgressCallback *progressCallback) {
+    this->progressCallback = progressCallback;
+}
+
+int FFmpegPlayer::getDuration() {
+    if (avContext) {
+        return avContext->duration / AV_TIME_BASE;//获取到秒
+    } else {
+        return -1;
+    }
 }

@@ -32,6 +32,9 @@ AudioChannel::AudioChannel(int streamIndex, AVCodecContext *codecContext, AVRati
                                  codecContext->channel_layout, codecContext->sample_fmt,
                                  codecContext->sample_rate, 0, 0);
     swr_init(swr_ctx);
+
+    packets.setSyncCallback(dropAvPackets);
+    frames.setSyncCallback(dropAvFrame);
 }
 
 AudioChannel::~AudioChannel() {
@@ -95,13 +98,17 @@ int AudioChannel::getPCMSize() {
         int samples_per_channel = swr_convert(swr_ctx, &out_buffers, dst_nb_samples,
                                               (const uint8_t **) frame->data,
                                               frame->nb_samples);
-//        pcm_data_size = samples_per_channel * out_sample_size ;//每个声道的数据个数
-        pcm_data_size = samples_per_channel * out_sample_size * out_channels;//所有声道完整数据
+        int single_pcm_data_size = samples_per_channel * out_sample_size;//每个声道的数据个数
+        //改变声道的数据能够调整音频播放速度
+//        single_pcm_data_size = single_pcm_data_size / 2;
+        pcm_data_size = single_pcm_data_size * out_channels;//所有声道完整数据
         //25fps 1秒25帧   每帧1/25秒
         //用于获取fps  av_q2d
         //time_base 就是从流中取到的AVRational,在AVRational中有帧数分子与时间基数分子
         // frame->best_effort_timestamp * av_q2d(time_base) 获取到每帧音频的时间戳
         audio_time = frame->best_effort_timestamp * av_q2d(time_base);
+
+
         break;
     }//end while
     releaseAvFrame(&frame);
@@ -111,9 +118,10 @@ int AudioChannel::getPCMSize() {
 
 void AudioChannel::audioDecode() {
     AVPacket *packet = 0;
-    while (isPlaying == 1) {
-        if (frames.size() > 100) {
-            av_usleep(10 * 1000);//microseconds
+    while (isPlaying) {
+        if (isPlaying && frames.size() > 100) {
+            //休眠 等待队列中的数据被消费
+            av_usleep(10 * 1000);//单位 microseconds
             continue;
         }
         //从队列中取出带解码包
