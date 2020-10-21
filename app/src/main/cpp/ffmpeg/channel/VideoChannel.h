@@ -8,6 +8,7 @@
 
 #include "BaseChannel.h"
 #include "AudioChannel.h"
+#include "../java_callback/JavaCompleteCallback.h"
 
 extern "C" {
 #include <libswscale/swscale.h>
@@ -17,9 +18,15 @@ extern "C" {
 typedef void (*RenderCallback)(uint8_t *, int, int, int);
 
 class VideoChannel : public BaseChannel {
-
 public:
-    VideoChannel(int streamIndex, AVCodecContext *avCodecContext, AVRational time_base_);
+    typedef struct {
+        double frame_delay;
+        double fps;
+        RenderCallback renderCallback = 0;
+    } VideoParam;
+
+    VideoChannel(int streamIndex, AVCodecContext *avCodecContext, AVRational time_base_,
+                 jlong file_duration);
 
     virtual ~VideoChannel();
 
@@ -33,32 +40,22 @@ public:
 
     void videoPlay();
 
-    void setRenderCallback(RenderCallback renderCallback);
-
-    void setFPS(double fps);
-
-    void setFrameDelayTime(int delay);
-
-    void setAudioChannel(AudioChannel *audioChannel);
+    void setVideoParam(VideoParam *param);
 
     void callbackProgress(int duration);
+
+    void setAudioChannel(AudioChannel *audioChannel);
 
 private:
     pthread_t thread_video_decode;
 
     pthread_t thread_video_play;
 
-    int isPlaying;
-
-    RenderCallback renderCallback;
-
-    AudioChannel *audioChannel = 0;
-
     int curDuration = -1;
 
-    int frame_delay = 0;
+    VideoParam *param;
 
-    double fps;
+    AudioChannel *audioChannel = 0;
 };
 
 

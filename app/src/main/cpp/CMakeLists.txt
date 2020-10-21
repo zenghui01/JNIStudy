@@ -1,123 +1,13 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-#----------签名测试模块---------------
-include_directories(./apk_signature)
-
-add_library(
-        apkSign-lib
-        SHARED
-        ./apk_signature/apk_signature_lib.cpp
-)
-
-target_link_libraries(
-        apkSign-lib
-        log)
-#----------签名测试模块---------------
-#----------热修复模块---------------
-include_directories(./hotfix)
-
-add_library(
-        native-lib
-        SHARED
-        native-lib.cpp
-)
-
-target_link_libraries(
-        native-lib
-        log)
-#----------热修复模块---------------
-
-#-------- gif模块--------------
-#链接头文件,当include的时候能够自动从该目录中寻找所需头文件
-include_directories(./gif_file)
-#链接.c资源文件
-aux_source_directory(./gif_file gif_files)
-
-add_library(
-        gif-lib
-        SHARED
-        gif_lib.cpp ${gif_files}
-)
-
-target_link_libraries(
-        gif-lib
-        jnigraphics
-        log)
-#-------- gif模块--------------
-
-#-------- 增量更新模块 --------------
-#链接头文件,当include的时候能够自动从该目录中寻找所需头文件
-include_directories(./bzip2)
-#链接.c资源文件
-aux_source_directory(./bzip2 bzip_srcs)
-
-add_library(
-        bzip_lib
-        SHARED
-        bzip_lib.cpp ${bzip_srcs}
-)
-
-target_link_libraries(
-        bzip_lib
-        log)
-
-#-------- 增量更新模块 --------------
-
 #----------测试代码------------
 set(var "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}")
 
 message("测试路径 : var = ${var}")
 #----------测试代码------------
-
-
-#------------ QQ变声------------------
-#链接头文件
-include_directories(./fmod_inc)
-#链接动态库
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}")
-
-add_library(
-        fmod_lib
-        SHARED
-        fmod_lib.cpp
-)
-
-target_link_libraries(
-        fmod_lib
-        fmod
-        fmodL
-        log
-)
-#------------ QQ变声------------------
-
-#------------- ffmpeg-----------------
-include_directories(ffmpeg_res)
-file(GLOB ffmpeg_res_file ./ffmpeg/*.cpp)
-file(GLOB ffmpeg_res_channel ./ffmpeg/channel/*.cpp)
-file(GLOB ffmpeg_res_callback ./ffmpeg/java_callback/*.cpp)
-
-foreach (file IN LISTS ffmpeg_res_file)
-    message("路径: ${file}")
-endforeach (file)
-
-
-add_library(
-        ffmpeg_lib
-        SHARED
-        ${ffmpeg_res_file}
-        ${ffmpeg_res_channel}
-        ${ffmpeg_res_callback}
-)
-
-target_link_libraries(
-        ffmpeg_lib
-        #静态库引入需要按照引用顺序引入,为了避免不必要的错误可以将一系列的静态库当做一个组引入
-        -Wl,--start-group
-        avcodec avfilter avformat avutil swresample swscale
-        -Wl,--end-group
-        log
-        z
-        android
-        OpenSLES
-)
-#------------- ffmpeg-----------------
+add_subdirectory(libapk_signature)
+add_subdirectory(libgif)
+add_subdirectory(libfmod)
+add_subdirectory(libhotfix)
+add_subdirectory(libbzip)
+add_subdirectory(ffmpeg)

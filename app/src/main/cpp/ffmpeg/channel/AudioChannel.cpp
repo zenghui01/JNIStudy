@@ -5,9 +5,10 @@
 
 #include "AudioChannel.h"
 
-AudioChannel::AudioChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_)
+AudioChannel::AudioChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_,
+                           jlong file_duration)
         : BaseChannel(streamIndex,
-                      codecContext, time_base_) {
+                      codecContext, time_base_, file_duration) {
     //初始化缓存区 out_buffers,如何设置缓冲区大小呢?
     //目标初始话参数 采样率 44100 采样格式16bits(位)=2个字节(1个字节八位) 声道数 2
     //AV_CH_LAYOUT_STEREO 声道类型
@@ -107,8 +108,11 @@ int AudioChannel::getPCMSize() {
         //time_base 就是从流中取到的AVRational,在AVRational中有帧数分子与时间基数分子
         // frame->best_effort_timestamp * av_q2d(time_base) 获取到每帧音频的时间戳
         audio_time = frame->best_effort_timestamp * av_q2d(time_base);
-
-
+        if (frames.empty() && !packets.isWorking()) {
+            LOGE("音频结束了");
+            isPlaying = false;
+            break;
+        }
         break;
     }//end while
     releaseAvFrame(&frame);
@@ -136,8 +140,19 @@ void AudioChannel::audioDecode() {
         //取到带解码的视频包
         ret = avcodec_send_packet(codecContext, packet);
         //0表示成功
-        if (ret) {
+        if (ret == AVERROR(EAGAIN)) {
+            //如果报错是eagain,表示当前包不完整,尝试取下一个包
+            continue;
+        } else if (ret != 0) {
+            //出现异常跳出循环,直接释放该帧
+            releaseAvPacket(&packet);
             break;
+        }
+        if (packet) {
+            jlong duration = packet->pts * av_q2d(time_base);
+            if (duration == file_duration && packets.empty()) {
+                packets.setWorking(0);
+            }
         }
         releaseAvPacket(&packet);//packet 不需要了 可以释放
         AVFrame *frame = av_frame_alloc();
@@ -266,7 +281,40 @@ void AudioChannel::audioPlay() {
 }
 
 void AudioChannel::stop() {
+    LOGE("audio stop");
+    isPlaying = 0;
 
+    pthread_join(thread_audio_decode, 0);
+    pthread_join(thread_audio_play, 0);
+
+    packets.setWorking(0);
+    frames.setWorking(0);
+
+    packets.clear();
+    frames.clear();
+
+    //7.1 设置停止状态
+    if (bqPlayerPlay) {
+        (*bqPlayerPlay)->SetPlayState(bqPlayerPlay, SL_PLAYSTATE_STOPPED);
+        bqPlayerPlay = 0;
+    }
+    //7.2 销毁播放器
+    if (bqPlayerObject) {
+        (*bqPlayerObject)->Destroy(bqPlayerObject);
+        bqPlayerObject = 0;
+        bqPlayerBufferQueue = 0;
+    }
+    //7.3 销毁混音器
+    if (outputMixObject) {
+        (*outputMixObject)->Destroy(outputMixObject);
+        outputMixObject = 0;
+    }
+    //7.4 销毁引擎
+    if (engineObject) {
+        (*engineObject)->Destroy(engineObject);
+        engineObject = 0;
+        engineInterface = 0;
+    }
 }
 
 void AudioChannel::release() {

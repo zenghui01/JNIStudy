@@ -6,14 +6,15 @@
 
 #include "VideoChannel.h"
 
-VideoChannel::VideoChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_)
-        : BaseChannel(streamIndex, codecContext, time_base_) {
+VideoChannel::VideoChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_,
+                           jlong file_duration)
+        : BaseChannel(streamIndex, codecContext, time_base_, file_duration) {
     frames.setSyncCallback(dropAvFrame);
     packets.setSyncCallback(dropAvPackets);
 }
 
 VideoChannel::~VideoChannel() {
-
+    DELETE(param);
 }
 
 void *task_video_decode(void *args) {
@@ -40,8 +41,28 @@ void VideoChannel::start() {
 }
 
 void VideoChannel::stop() {
+    LOGE("video stop");
     curDuration = -1;
+    isPlaying = 0;
 
+    pthread_join(thread_video_decode, 0);
+    pthread_join(thread_video_play, 0);
+
+    packets.setWorking(0);
+    frames.setWorking(0);
+
+    packets.clear();
+    frames.clear();
+
+    if (param->renderCallback) {
+        param->renderCallback = 0;
+    }
+    if (param) {
+        DELETE(param)
+    }
+    if (audioChannel) {
+        audioChannel = 0;
+    }
 }
 
 void VideoChannel::release() {
@@ -79,6 +100,11 @@ void VideoChannel::videoPlay() {
         if (!ret) {
             continue;
         }
+        if (frames.empty() && !packets.isWorking()) {
+            LOGE("视频结束了");
+            isPlaying = false;
+            break;
+        }
         //将yuv原始数据转换成rgba
         sws_scale(swsContext, frame->data, frame->linesize, 0, frame->height, dst_data,
                   dst_linesize);
@@ -87,11 +113,11 @@ void VideoChannel::videoPlay() {
         //When decoding, this signals how much the picture must be delayed.
         //frame->repeat_pict
         //额外延迟时间
-        double extra_delay = frame->repeat_pict / (2 * fps);
+        double extra_delay = frame->repeat_pict / (2 * param->fps);
         //根据fps获取延迟时间
 //        double base_delay = 1.0 / fps;//fps秒
         //获取到真正的延迟时间
-        double real_delay = frame_delay + extra_delay;
+        double real_delay = param->frame_delay + extra_delay;
 
         //视频每一帧的时间戳
         double video_time = frame->best_effort_timestamp * av_q2d(time_base);
@@ -125,9 +151,9 @@ void VideoChannel::videoPlay() {
             callbackProgress(audio_time);
         }
         //渲染回调
-        if (renderCallback) {
-            renderCallback(dst_data[0], codecContext->width, codecContext->height,
-                           dst_linesize[0]);
+        if (param->renderCallback) {
+            param->renderCallback(dst_data[0], codecContext->width, codecContext->height,
+                                  dst_linesize[0]);
         }
         releaseAvFrame(&frame);
     }
@@ -135,6 +161,7 @@ void VideoChannel::videoPlay() {
 
 
 void VideoChannel::videoDecode() {
+    LOGE("packet1");
     AVPacket *packet = 0;
     while (isPlaying) {
         if (isPlaying && frames.size() > 100) {
@@ -154,24 +181,24 @@ void VideoChannel::videoDecode() {
         //取到带解码的视频包
         ret = avcodec_send_packet(codecContext, packet);
         //0表示成功
-        if (ret == AVERROR_EOF) {
-            LOGE("暂无更多的视频包了,停止");
-            packets.setWorking(0);
-        } else if (ret == AVERROR(EAGAIN)) {
-            //如果报错是eagain放弃当前帧,尝试取下一帧
+        if (ret == AVERROR(EAGAIN)) {
+            //如果报错是eagain,表示当前包不完整,尝试取下一个包
             continue;
         } else if (ret != 0) {
             //出现异常跳出循环,直接释放该帧
             releaseAvPacket(&packet);
             break;
         }
+        if (packet) {
+            jlong duration = packet->pts * av_q2d(time_base);
+            if (duration == file_duration && packets.empty()) {
+                packets.setWorking(0);
+            }
+        }
         releaseAvPacket(&packet);//packet 不需要了 可以释放
         AVFrame *frame = av_frame_alloc();
         ret = avcodec_receive_frame(codecContext, frame);
-        if (ret == AVERROR_EOF) {
-            LOGE("暂无更多的视频包了,停止");
-            packets.setWorking(0);
-        } else if (ret == AVERROR(EAGAIN)) {
+        if (ret == AVERROR(EAGAIN)) {
             //如果报错是eagain放弃当前帧,尝试取下一帧
             continue;
         } else if (ret != 0) {
@@ -185,23 +212,25 @@ void VideoChannel::videoDecode() {
     releaseAvPacket(&packet);
 }
 
-void VideoChannel::setRenderCallback(RenderCallback renderCallback) {
-    this->renderCallback = renderCallback;
+void VideoChannel::setVideoParam(VideoChannel::VideoParam *param) {
+    this->param = param;
 }
 
-void VideoChannel::setFPS(double fps) {
-    this->fps = fps;
-}
 
+//void VideoChannel::setRenderCallback(RenderCallback renderCallback) {
+//    this->renderCallback = renderCallback;
+//}
+//
+//void VideoChannel::setFPS(double fps) {
+//    this->fps = fps;
+//}
+//
 void VideoChannel::setAudioChannel(AudioChannel *audioChannel) {
     this->audioChannel = audioChannel;
 }
-
-void VideoChannel::setFrameDelayTime(int delay) {
-    frame_delay = delay;
-}
-
-
-
-
+//
+//void VideoChannel::setFrameDelayTime(double delay) {
+//    LOGE("code delay %d", delay);
+//    frame_delay = delay;
+//}
 

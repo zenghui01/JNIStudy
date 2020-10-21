@@ -10,9 +10,9 @@ extern "C" {
 };
 
 #include "../safe_queue.h"
-#include "../macro.h"
+#include "../../macro.h"
 #include <pthread.h>
-#include "../java_callback/JavaFFmpegProgressCallback.h"
+#include "../java_callback/JavaProgressCallback.h"
 
 class BaseChannel {
 public:
@@ -22,9 +22,10 @@ public:
      * @param codecContext_  流中解码上下文
      * @param time_base_  流中时间基数
      */
-    BaseChannel(int stream_Index, AVCodecContext *codecContext_, AVRational time_base_)
+    BaseChannel(int stream_Index, AVCodecContext *codecContext_, AVRational time_base_,
+                jlong file_duration)
             : streamIndex(stream_Index),
-              codecContext(codecContext_), time_base(time_base_) {
+              codecContext(codecContext_), time_base(time_base_), file_duration(file_duration) {
         packets.setReleaseCallback(releaseAvPacket);
         frames.setReleaseCallback(releaseAvFrame);
     }
@@ -71,7 +72,7 @@ public:
     }
 
 
-    void setProgressCallback(JavaFFmpegProgressCallback *progressCallback) {
+    void setProgressCallback(JavaProgressCallback *progressCallback) {
         this->progressCallback = progressCallback;
     }
 
@@ -80,7 +81,9 @@ public:
     SafeQueue<AVPacket *> packets; //码流包
     AVCodecContext *codecContext;
     AVRational time_base;
-    JavaFFmpegProgressCallback *progressCallback;
+    JavaProgressCallback *progressCallback;
+    int isPlaying;
+    jlong file_duration;
 };
 
 

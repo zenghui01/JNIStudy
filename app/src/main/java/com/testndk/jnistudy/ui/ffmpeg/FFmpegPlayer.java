@@ -20,6 +20,8 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
 
     private OnErrorListener mErrorListener;
 
+    private OnCompleteListener mCompleteListener;
+
     public SurfaceHolder surfaceHolder;
 
 
@@ -46,6 +48,10 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
         this.mProgressListener = mProgressListener;
     }
 
+    public void setCompleteListener(OnCompleteListener mCompleteListener) {
+        this.mCompleteListener = mCompleteListener;
+    }
+
     public void prepare() {
         prepareNative(dataSource);
     }
@@ -56,6 +62,10 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
 
     public void stop() {
 
+    }
+
+    public void pause() {
+        pauseNative();
     }
 
     public void release() {
@@ -93,6 +103,21 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
         onSeekNative(duration);
     }
 
+
+    private void onPlayComplete() {
+        LogUtils.eLog("回调java层onComplete");
+        if (mCompleteListener != null) {
+            mCompleteListener.onComplete();
+        }
+    }
+
+    private void onPlayPause() {
+        LogUtils.eLog("回调java层onPlayPause");
+        if (mCompleteListener != null) {
+            mCompleteListener.onPause();
+        }
+    }
+
     /**
      * jni反射调用
      */
@@ -103,7 +128,6 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
     }
 
     private void onJniProgress(int duration) {
-        LogUtils.eLog("onJniProgress", duration);
         if (null != mProgressListener) {
             mProgressListener.onProgress(duration);
         }
@@ -147,11 +171,19 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
         void onProgress(int progress);
     }
 
+    public interface OnCompleteListener {
+        void onComplete();
+
+        void onPause();
+    }
+
     private native void prepareNative(String dataSource);
 
     private native void startNative();
 
     private native void stopNative();
+
+    private native void pauseNative();
 
     private native void releaseNative();
 

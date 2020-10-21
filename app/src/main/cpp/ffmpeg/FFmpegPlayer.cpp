@@ -32,10 +32,7 @@ FFmpegPlayer::FFmpegPlayer(const char *data_source_) {
 }
 
 FFmpegPlayer::~FFmpegPlayer() {
-    if (data_source) {
-        delete data_source;
-        data_source = 0;
-    }
+    DELETE(data_source)
 }
 
 
@@ -106,8 +103,10 @@ void FFmpegPlayer::player_prepare() {
         /**
        * 10, 从编码器参数中获取流类型 codec_type
        */
+        jlong file_duration = avContext->duration / AV_TIME_BASE;
         if (codecParameters->codec_type == AVMEDIA_TYPE_AUDIO) {
-            audio_channel = new AudioChannel(stream_index, avCodecContext, stream->time_base);
+            audio_channel = new AudioChannel(stream_index, avCodecContext, stream->time_base,
+                                             file_duration);
         } else if (codecParameters->codec_type == AVMEDIA_TYPE_VIDEO) {
             //            stream->attached_pic;// 封面图像数据
             if (stream->disposition & AV_DISPOSITION_ATTACHED_PIC) {
@@ -119,9 +118,13 @@ void FFmpegPlayer::player_prepare() {
             AVRational frame_rate = stream->avg_frame_rate;
             //根据帧率获取到fps
             double fps = av_q2d(frame_rate);
-            video_channel = new VideoChannel(stream_index, avCodecContext, stream->time_base);
-            video_channel->setFPS(fps);
-            video_channel->setRenderCallback(renderCallback);
+            auto *param = new VideoChannel::VideoParam();
+            video_channel = new VideoChannel(stream_index, avCodecContext, stream->time_base,
+                                             file_duration);
+            param->renderCallback = renderCallback;
+            param->fps = fps;
+            param->frame_delay = codecParameters->video_delay / fps;
+            video_channel->setVideoParam(param);
         }
     }
     if (!audio_channel && !video_channel) {
@@ -130,9 +133,9 @@ void FFmpegPlayer::player_prepare() {
         return;
     }
 
-    if (callback) {
+    if (loadSuccessCallback) {
         LOGE("调用Prepare方法");
-        callback->prepare(THREAD_CHILD);
+        loadSuccessCallback->prepare(THREAD_CHILD);
     }
 
 }
@@ -151,26 +154,59 @@ void FFmpegPlayer::player_start() {
             av_usleep(10 * 1000);//microseconds
             continue;
         }
+        hasPlayComplete = 0;
+        if (hasReadEnd) {
+            //已经读完了,要考虑是否播放完
+            int playing = 0;
+            if (video_channel) {
+                if (video_channel->isPlaying) {
+                    playing = 1;
+                }
+            }
+            if (audio_channel) {
+                if (audio_channel->isPlaying) {
+                    playing = 1;
+                }
+            }
+            if (!playing) {
+                LOGE("文件全部读取完成");
+                break;
+            }
+            continue;
+        }
         AVPacket *packet = av_packet_alloc();
         pthread_mutex_lock(&seek_mutex);
         int ret = av_read_frame(avContext, packet);
+        if (ret == AVERROR_EOF) {
+            hasReadEnd = 1;
+        }
         pthread_mutex_unlock(&seek_mutex);
         if (!ret) {
             if (video_channel && video_channel->streamIndex == packet->stream_index) {
                 video_channel->packets.push(packet);
             } else if (audio_channel && audio_channel->streamIndex == packet->stream_index) {
                 audio_channel->packets.push(packet);
-            } else if (ret == AVERROR_EOF) {
-                //已经读完了,要考虑是否播放完
-
             } else {
                 break;
             }
         }
     }
     isPlaying = 0;
-    video_channel->stop();
-    audio_channel->stop();
+    if (hasReadEnd) {
+        hasPlayComplete = 1;
+        //释放视频与音频中的资源
+//    video_channel->stop();
+//    audio_channel->stop();
+        //回调java层完成
+        if (completeCallback) {
+            completeCallback->onComplete(THREAD_CHILD);
+        }
+    } else {
+        if (completeCallback) {
+            completeCallback->onPlayPause(THREAD_CHILD);
+        }
+    }
+
 }
 
 void FFmpegPlayer::prepare() {
@@ -184,6 +220,15 @@ void FFmpegPlayer::prepare() {
 
 
 void FFmpegPlayer::start() {
+    if (isPlaying) {
+        return;
+    }
+    //播放完的话,重新从头开始播放
+    if (hasPlayComplete) {
+        onSeek(0);
+    }
+    hasPlayComplete = 0;
+    hasReadEnd = 0;
     isPlaying = 1;
     if (video_channel) {
         LOGE("video channel 不为空启动packet转换");
@@ -199,8 +244,57 @@ void FFmpegPlayer::start() {
     pthread_create(&pid_start, 0, task_start, this);
 }
 
-void FFmpegPlayer::stop() {
+//线程函数必须返回0
+void *task_stop(void *args) {
+    auto *player = static_cast<FFmpegPlayer *>(args);
+    pthread_join(player->pid_prepare, 0);
+    pthread_join(player->pid_start, 0);
+    //AVFormatContext
+    if (player->avContext) {
+        avformat_close_input(&player->avContext);
+        avformat_free_context(player->avContext);
+        player->avContext = 0;
+    }
+    //音频解码通道
+    if (player->audio_channel) {
+        player->audio_channel = 0;
+    }
+    //视频解码通道
+    if (player->video_channel) {
+        player->video_channel = 0;
+    }
+    return 0;
+}
 
+/**
+ * stop逻辑
+ * 1.当时视频预加载时,直接stop,反复执行可能导致异常问题出现,所以stop之前最好是等待prepare执行完
+ * 2.当时视频播放时,直接stop,反复执行可能导致audio_channel和video_channel未释放,最好是等待start线程执行执行完后进行释放
+ * 由于两步都是耗时操作,为了避免anr,放到线程中执行
+ */
+void FFmpegPlayer::stop() {
+    isPlaying = 0;
+    //置空加载成功回调
+    if (loadSuccessCallback) {
+        DELETE(loadSuccessCallback)
+    }
+    //置空错误回调
+    if (errorCallback) {
+        DELETE(errorCallback)
+    }
+    //置空进度回调
+    if (progressCallback) {
+        DELETE(progressCallback)
+    }
+    //置空渲染回调
+    if (renderCallback) {
+        renderCallback = 0;
+    }
+    //置空完成回调
+    if (completeCallback) {
+        DELETE(completeCallback)
+    }
+    pthread_create(&pid_stop, 0, task_stop, this);
 }
 
 void FFmpegPlayer::release() {
@@ -214,12 +308,12 @@ void FFmpegPlayer::onError(jint code, const char *errorMsg) {
     }
 }
 
-void FFmpegPlayer::setFFmpegCallback(JavaFFmpegCallback *callback) {
+void FFmpegPlayer::setFFmpegCallback(JavaCallback *callback) {
     LOGE("设置Prepare监听");
-    this->callback = callback;
+    this->loadSuccessCallback = callback;
 }
 
-void FFmpegPlayer::setFFmpegErrorCallback(JavaFFmpegErrorCallback *errorCallback) {
+void FFmpegPlayer::setFFmpegErrorCallback(JavaErrorCallback *errorCallback) {
     LOGE("设置加载错误监听");
     this->errorCallback = errorCallback;
 }
@@ -230,7 +324,6 @@ void FFmpegPlayer::setRenderCallback(RenderCallback renderCallback) {
 
 void FFmpegPlayer::onSeek(int duration) {
     if (!avContext) {
-
         return;
     }
     if (duration < 0 || duration > this->getDuration()) {
@@ -241,15 +334,19 @@ void FFmpegPlayer::onSeek(int duration) {
     }
     LOGE("没有异常%d", duration);
     pthread_mutex_lock(&seek_mutex);
+
     int ret = av_seek_frame(avContext, -1, duration * AV_TIME_BASE,
                             AVSEEK_FLAG_BACKWARD);
     if (ret < 0) {
-        LOGE("拖拽调整进度失败");
         pthread_mutex_unlock(&seek_mutex);
+        onError(ret, "seek error");
         return;
     }
+    //重置已经播放结束状态
+    hasPlayComplete = 0;
+    //重置已经读取完的状态
+    hasReadEnd = 0;
     if (audio_channel) {
-//        avcodec_flush_buffers(audio_channel->codecContext);
         audio_channel->packets.setWorking(0);
         audio_channel->frames.setWorking(0);
 
@@ -261,7 +358,6 @@ void FFmpegPlayer::onSeek(int duration) {
     }
 
     if (video_channel) {
-//        avcodec_flush_buffers(video_channel->codecContext);
         video_channel->packets.setWorking(0);
         video_channel->frames.setWorking(0);
 
@@ -275,7 +371,7 @@ void FFmpegPlayer::onSeek(int duration) {
     pthread_mutex_unlock(&seek_mutex);
 }
 
-void FFmpegPlayer::setProgressCallback(JavaFFmpegProgressCallback *progressCallback) {
+void FFmpegPlayer::setProgressCallback(JavaProgressCallback *progressCallback) {
     this->progressCallback = progressCallback;
 }
 
@@ -284,5 +380,24 @@ int FFmpegPlayer::getDuration() {
         return avContext->duration / AV_TIME_BASE;//获取到秒
     } else {
         return -1;
+    }
+}
+
+void FFmpegPlayer::setCompleteCallback(JavaCompleteCallback *completeCallback) {
+    this->completeCallback = completeCallback;
+}
+
+void FFmpegPlayer::pause() {
+    isPlaying = 0;
+    if (audio_channel) {
+        audio_channel->isPlaying = 0;
+        audio_channel->packets.setWorking(0);
+        audio_channel->frames.setWorking(0);
+    }
+
+    if (video_channel) {
+        video_channel->isPlaying = 0;
+        video_channel->packets.setWorking(0);
+        video_channel->frames.setWorking(0);
     }
 }

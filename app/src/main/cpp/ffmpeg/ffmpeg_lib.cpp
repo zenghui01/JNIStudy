@@ -60,14 +60,16 @@ Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_prepareNative(JNIEnv *env, jobj
                                                                jstring data_source_) {
     const char *data_source = env->GetStringUTFChars(data_source_, 0);
     LOGE("视频地址:%s", data_source);
-    auto *ffCallBack = new JavaFFmpegCallback(javaVM, env, thiz_);
-    auto *ffErrorCallback = new JavaFFmpegErrorCallback(javaVM, env, thiz_);
-    auto *ffProgressCallback = new JavaFFmpegProgressCallback(javaVM, env, thiz_);
+    auto *ffCallBack = new JavaCallback(javaVM, env, thiz_);
+    auto *ffErrorCallback = new JavaErrorCallback(javaVM, env, thiz_);
+    auto *ffProgressCallback = new JavaProgressCallback(javaVM, env, thiz_);
+    auto *completeCallback = new JavaCompleteCallback(javaVM, env, thiz_);
     player = new FFmpegPlayer(data_source);
     player->setFFmpegCallback(ffCallBack);
     player->setFFmpegErrorCallback(ffErrorCallback);
     player->setProgressCallback(ffProgressCallback);
     player->setRenderCallback(renderFrame);
+    player->setCompleteCallback(completeCallback);
     player->prepare();
 }
 
@@ -88,11 +90,23 @@ Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_startNative(JNIEnv *env, jobjec
     }
 }
 
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_pauseNative(JNIEnv *env, jobject thiz) {
+    if (player) {
+        LOGE("开始播放");
+        player->pause();
+    }
+}
+
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_stopNative(JNIEnv *env, jobject thiz) {
-
+    if (player) {
+        LOGE("停止播放");
+        player->stop();
+    }
 }
 
 extern "C"

@@ -16,7 +16,8 @@ extern "C" {
 
 class AudioChannel : public BaseChannel {
 public:
-    AudioChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_);
+    AudioChannel(int streamIndex, AVCodecContext *codecContext, AVRational time_base_,
+                 jlong file_duration);
 
     virtual ~AudioChannel();
 
@@ -47,7 +48,6 @@ public:
 private:
     pthread_t thread_audio_decode;
     pthread_t thread_audio_play;
-    int isPlaying;
     //引擎obj
     SLObjectItf engineObject;
     //引擎接口
