@@ -51,7 +51,7 @@ typedef struct AVVideotoolboxContext {
     VTDecompressionSessionRef session;
 
     /**
-     * The output loadSuccessCallback that must be passed to the session.
+     * The output callback that must be passed to the session.
      * Set by av_videottoolbox_default_init()
      */
     VTDecompressionOutputCallback output_callback;
@@ -79,9 +79,9 @@ typedef struct AVVideotoolboxContext {
 /**
  * Allocate and initialize a Videotoolbox context.
  *
- * This function should be called from the get_format() loadSuccessCallback when the caller
+ * This function should be called from the get_format() callback when the caller
  * selects the AV_PIX_FMT_VIDETOOLBOX format. The caller must then create
- * the decoder object (using the output loadSuccessCallback provided by libavcodec) that
+ * the decoder object (using the output callback provided by libavcodec) that
  * will be used for Videotoolbox-accelerated decoding.
  *
  * When decoding with Videotoolbox is finished, the caller must destroy the decoder

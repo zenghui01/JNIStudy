@@ -795,8 +795,8 @@ int av_opt_copy(void *dest, const void *src);
 /**
  * Get a default list of allowed ranges for the given option.
  *
- * This list is constructed without using the AVClass.query_ranges() loadSuccessCallback
- * and can be used as fallback from within the loadSuccessCallback.
+ * This list is constructed without using the AVClass.query_ranges() callback
+ * and can be used as fallback from within the callback.
  *
  * @param flags is a bitmask of flags, undefined flags should not be set and should be ignored
  *              AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a AVClass instead of a full instance

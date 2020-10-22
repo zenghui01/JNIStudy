@@ -54,7 +54,7 @@ typedef struct AVHWDeviceInternal AVHWDeviceInternal;
  * AVHWDeviceContext (such as AVHWFramesContext, describing a frame pool with
  * specific properties) will hold an internal reference to it. After all the
  * references are released, the AVHWDeviceContext itself will be freed,
- * optionally invoking a user-specified loadSuccessCallback for uninitializing the hardware
+ * optionally invoking a user-specified callback for uninitializing the hardware
  * state.
  */
 typedef struct AVHWDeviceContext {
@@ -93,17 +93,17 @@ typedef struct AVHWDeviceContext {
     /**
      * This field may be set by the caller before calling av_hwdevice_ctx_init().
      *
-     * If non-NULL, this loadSuccessCallback will be called when the last reference to
+     * If non-NULL, this callback will be called when the last reference to
      * this context is unreferenced, immediately before it is freed.
      *
      * @note when other objects (e.g an AVHWFramesContext) are derived from this
-     *       struct, this loadSuccessCallback will be invoked after all such child objects
+     *       struct, this callback will be invoked after all such child objects
      *       are fully uninitialized and their respective destructors invoked.
      */
     void (*free)(struct AVHWDeviceContext *ctx);
 
     /**
-     * Arbitrary user data, to be used e.g. by the free() loadSuccessCallback.
+     * Arbitrary user data, to be used e.g. by the free() callback.
      */
     void *user_opaque;
 } AVHWDeviceContext;
@@ -163,13 +163,13 @@ typedef struct AVHWFramesContext {
     /**
      * This field may be set by the caller before calling av_hwframe_ctx_init().
      *
-     * If non-NULL, this loadSuccessCallback will be called when the last reference to
+     * If non-NULL, this callback will be called when the last reference to
      * this context is unreferenced, immediately before it is freed.
      */
     void (*free)(struct AVHWFramesContext *ctx);
 
     /**
-     * Arbitrary user data, to be used e.g. by the free() loadSuccessCallback.
+     * Arbitrary user data, to be used e.g. by the free() callback.
      */
     void *user_opaque;
 
@@ -179,7 +179,7 @@ typedef struct AVHWFramesContext {
      * The buffers returned by calling av_buffer_pool_get() on this pool must
      * have the properties described in the documentation in the corresponding hw
      * type's header (hwcontext_*.h). The pool will be freed strictly before
-     * this struct's free() loadSuccessCallback is invoked.
+     * this struct's free() callback is invoked.
      *
      * This field may be NULL, then libavutil will attempt to allocate a pool
      * internally. Note that certain device types enforce pools allocated at

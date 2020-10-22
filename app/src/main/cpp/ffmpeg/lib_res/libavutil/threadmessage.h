@@ -89,7 +89,7 @@ void av_thread_message_queue_set_err_recv(AVThreadMessageQueue *mq,
                                           int err);
 
 /**
- * Set the optional free message loadSuccessCallback function which will be called if an
+ * Set the optional free message callback function which will be called if an
  * operation is removing messages from the queue.
  */
 void av_thread_message_queue_set_free_func(AVThreadMessageQueue *mq,

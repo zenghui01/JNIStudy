@@ -121,7 +121,7 @@ AVBufferRef *av_buffer_allocz(int size);
  * If this function fails, data is left untouched.
  * @param data   data array
  * @param size   size of data in bytes
- * @param free   a loadSuccessCallback for freeing this buffer's data
+ * @param free   a callback for freeing this buffer's data
  * @param opaque parameter to be got for processing or passed to free
  * @param flags  a combination of AV_BUFFER_FLAG_*
  *
@@ -132,7 +132,7 @@ AVBufferRef *av_buffer_create(uint8_t *data, int size,
                               void *opaque, int flags);
 
 /**
- * Default free loadSuccessCallback, which calls av_free() on the buffer data.
+ * Default free callback, which calls av_free() on the buffer data.
  * This function is meant to be passed to av_buffer_create(), not called
  * directly.
  */
@@ -226,7 +226,7 @@ int av_buffer_realloc(AVBufferRef **buf, int size);
  * Once all the buffers are released, it will automatically be freed.
  *
  * Allocating and releasing buffers with this API is thread-safe as long as
- * either the default alloc loadSuccessCallback is used, or the user-supplied one is
+ * either the default alloc callback is used, or the user-supplied one is
  * thread-safe.
  */
 

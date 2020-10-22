@@ -970,7 +970,7 @@ typedef struct RcOverride{
 /* codec capabilities */
 
 /**
- * Decoder can use draw_horiz_band loadSuccessCallback.
+ * Decoder can use draw_horiz_band callback.
  */
 #define AV_CODEC_CAP_DRAW_HORIZ_BAND     (1 <<  0)
 /**
@@ -1802,13 +1802,13 @@ typedef struct AVCodecContext {
                             int y, int type, int height);
 
     /**
-     * loadSuccessCallback to negotiate the pixelFormat
+     * callback to negotiate the pixelFormat
      * @param fmt is the list of formats which are supported by the codec,
      * it is terminated by -1 as 0 is a valid format, the formats are ordered by quality.
      * The first is always the native one.
-     * @note The loadSuccessCallback may be called again immediately if initialization for
+     * @note The callback may be called again immediately if initialization for
      * the selected (hardware-accelerated) pixel format failed.
-     * @warning Behavior is undefined if the loadSuccessCallback returns a value not
+     * @warning Behavior is undefined if the callback returns a value not
      * in the fmt list of formats.
      * @return the chosen format
      * - encoding: unused
@@ -2298,28 +2298,28 @@ typedef struct AVCodecContext {
     enum AVSampleFormat request_sample_fmt;
 
     /**
-     * This loadSuccessCallback is called at the beginning of each frame to get data
+     * This callback is called at the beginning of each frame to get data
      * buffer(s) for it. There may be one contiguous buffer for all the data or
      * there may be a buffer per each data plane or anything in between. What
      * this means is, you may set however many entries in buf[] you feel necessary.
      * Each buffer must be reference-counted using the AVBuffer API (see description
      * of buf[] below).
      *
-     * The following fields will be set in the frame before this loadSuccessCallback is
+     * The following fields will be set in the frame before this callback is
      * called:
      * - format
      * - width, height (video only)
      * - sample_rate, channel_layout, nb_samples (audio only)
      * Their values may differ from the corresponding values in
-     * AVCodecContext. This loadSuccessCallback must use the frame values, not the codec
+     * AVCodecContext. This callback must use the frame values, not the codec
      * context values, to calculate the required buffer size.
      *
-     * This loadSuccessCallback must fill the following fields in the frame:
+     * This callback must fill the following fields in the frame:
      * - data[]
      * - linesize[]
      * - extended_data:
      *   * if the data is planar audio with more than 8 channels, then this
-     *     loadSuccessCallback must allocate and fill extended_data to contain all pointers
+     *     callback must allocate and fill extended_data to contain all pointers
      *     to all data planes. data[] must hold as many pointers as it can.
      *     extended_data must be allocated with av_malloc() and will be freed in
      *     av_frame_unref().
@@ -2330,7 +2330,7 @@ typedef struct AVCodecContext {
      *   AVBufferRef per data[] entry. See: av_buffer_create(), av_buffer_alloc(),
      *   and av_buffer_ref().
      * - extended_buf and nb_extended_buf must be allocated with av_malloc() by
-     *   this loadSuccessCallback and filled with the extra buffers if there are more
+     *   this callback and filled with the extra buffers if there are more
      *   buffers than buf[] can hold. extended_buf will be freed in
      *   av_frame_unref().
      *
@@ -2354,7 +2354,7 @@ typedef struct AVCodecContext {
      * Some decoders do not support linesizes changing between frames.
      *
      * If frame multithreading is used and thread_safe_callbacks is set,
-     * this loadSuccessCallback may be called from a different thread, but not from more
+     * this callback may be called from a different thread, but not from more
      * than one at once. Does not need to be reentrant.
      *
      * @see avcodec_align_dimensions2()
@@ -2531,7 +2531,7 @@ typedef struct AVCodecContext {
     /**
      * @deprecated unused
      */
-    /* The RTP loadSuccessCallback: This function is called    */
+    /* The RTP callback: This function is called    */
     /* every time the encoder has a packet to send. */
     /* It depends on the encoder if the data starts */
     /* with a Start Code (it should). H.263 does.   */
@@ -2843,7 +2843,7 @@ typedef struct AVCodecContext {
     int active_thread_type;
 
     /**
-     * Set by the client if its custom get_buffer() loadSuccessCallback can be called
+     * Set by the client if its custom get_buffer() callback can be called
      * synchronously from another thread, which allows faster multithreaded decoding.
      * draw_horiz_band() will be called from other threads regardless of this setting.
      * Ignored if the default get_buffer() is used.
@@ -3244,7 +3244,7 @@ typedef struct AVCodecContext {
      * the caller after being set.
      *
      * - decoding: This field should be set by the caller from the get_format()
-     *             loadSuccessCallback. The previous reference (if any) will always be
+     *             callback. The previous reference (if any) will always be
      *             unreffed by libavcodec before the get_format() call.
      *
      *             If the default get_buffer2() is used with a hwaccel pixel
@@ -3318,7 +3318,7 @@ typedef struct AVCodecContext {
      * decoding (if active).
      * - encoding: unused
      * - decoding: Set by user (either before avcodec_open2(), or in the
-     *             AVCodecContext.get_format loadSuccessCallback)
+     *             AVCodecContext.get_format callback)
      */
     int hwaccel_flags;
 
@@ -3430,7 +3430,7 @@ enum {
      *
      * When selecting this format for a decoder,
      * AVCodecContext.hw_frames_ctx should be set to a suitable frames
-     * context inside the get_format() loadSuccessCallback.  The frames context
+     * context inside the get_format() callback.  The frames context
      * must have been created on a device of the specified type.
      */
     AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX = 0x02,
@@ -4675,7 +4675,7 @@ AVCodec *avcodec_find_decoder(enum AVCodecID id);
 AVCodec *avcodec_find_decoder_by_name(const char *name);
 
 /**
- * The default loadSuccessCallback for AVCodecContext.get_buffer2(). It is made public so
+ * The default callback for AVCodecContext.get_buffer2(). It is made public so
  * it can be called by custom get_buffer2() implementations for decoders without
  * AV_CODEC_CAP_DR1 set.
  */
@@ -4751,7 +4751,7 @@ enum AVChromaLocation avcodec_chroma_pos_to_enum(int xpos, int ypos);
  * @param      avctx the codec context
  * @param[out] frame The AVFrame in which to store decoded audio samples.
  *                   The decoder will allocate a buffer for the decoded frame by
- *                   calling the AVCodecContext.get_buffer2() loadSuccessCallback.
+ *                   calling the AVCodecContext.get_buffer2() callback.
  *                   When AVCodecContext.refcounted_frames is set to 1, the frame is
  *                   reference counted and the returned reference belongs to the
  *                   caller. The caller must release the frame using av_frame_unref()
@@ -4802,7 +4802,7 @@ int avcodec_decode_audio4(AVCodecContext *avctx, AVFrame *frame,
  * @param[out] picture The AVFrame in which the decoded video frame will be stored.
  *             Use av_frame_alloc() to get an AVFrame. The codec will
  *             allocate memory for the actual bitmap by calling the
- *             AVCodecContext.get_buffer2() loadSuccessCallback.
+ *             AVCodecContext.get_buffer2() callback.
  *             When AVCodecContext.refcounted_frames is set to 1, the frame is
  *             reference counted and the returned reference belongs to the
  *             caller. The caller must release the frame using av_frame_unref()
@@ -4991,7 +4991,7 @@ int avcodec_receive_packet(AVCodecContext *avctx, AVPacket *avpkt);
 
 /**
  * Create and return a AVHWFramesContext with values adequate for hardware
- * decoding. This is meant to get called from the get_format loadSuccessCallback, and is
+ * decoding. This is meant to get called from the get_format callback, and is
  * a helper for preparing a AVHWFramesContext for AVCodecContext.hw_frames_ctx.
  * This API is for decoding with certain hardware acceleration modes/APIs only.
  *
@@ -5015,7 +5015,7 @@ int avcodec_receive_packet(AVCodecContext *avctx, AVPacket *avpkt);
  *   Even if this function returns successfully, hwaccel initialization could
  *   fail later. (The degree to which implementations check whether the stream
  *   is actually supported varies. Some do this check only after the user's
- *   get_format loadSuccessCallback returns.)
+ *   get_format callback returns.)
  * - The hw_pix_fmt must be one of the choices suggested by get_format. If the
  *   user decides to use a AVHWFramesContext prepared with this API function,
  *   the user must return the same hw_pix_fmt from get_format.
@@ -5036,9 +5036,9 @@ int avcodec_receive_packet(AVCodecContext *avctx, AVPacket *avpkt);
  * - Fields that use dynamically allocated values of any kind must not be set
  *   by the user unless setting them is explicitly allowed by the documentation.
  *   If the user sets AVHWFramesContext.free and AVHWFramesContext.user_opaque,
- *   the new free loadSuccessCallback must call the potentially set previous free loadSuccessCallback.
+ *   the new free callback must call the potentially set previous free callback.
  *   This API call may set any dynamically allocated fields, including the free
- *   loadSuccessCallback.
+ *   callback.
  *
  * The function will set at least the following fields on AVHWFramesContext
  * (potentially more, depending on hwaccel API):
@@ -5276,7 +5276,7 @@ typedef struct AVCodecParser {
     int codec_ids[5]; /* several codec IDs are permitted */
     int priv_data_size;
     int (*parser_init)(AVCodecParserContext *s);
-    /* This loadSuccessCallback never returns an error, a negative value means that
+    /* This callback never returns an error, a negative value means that
      * the frame start was in a previous packet. */
     int (*parser_parse)(AVCodecParserContext *s,
                         AVCodecContext *avctx,
@@ -6148,9 +6148,9 @@ enum AVLockOp {
  * av_lockmgr_register is not thread-safe, it must be called from a
  * single thread before any calls which make use of locking are used.
  *
- * @param cb User defined loadSuccessCallback. av_lockmgr_register invokes calls
- *           to this loadSuccessCallback and the previously registered loadSuccessCallback.
- *           The loadSuccessCallback will be used to create more than one mutex
+ * @param cb User defined callback. av_lockmgr_register invokes calls
+ *           to this callback and the previously registered callback.
+ *           The callback will be used to create more than one mutex
  *           each of which must be backed by its own underlying locking
  *           mechanism (i.e. do not use a single static object to
  *           implement your lock manager). If cb is set to NULL the

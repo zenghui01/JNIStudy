@@ -5,8 +5,16 @@ message("测试路径 : var = ${var}")
 message("测试路径 : var = ${ffres}")
 #----------测试代码------------
 #------------- ffmpeg-----------------
-#链接动态库
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}")
+#添加rtmp库
+#add_subdirectory(librtmp)
+#指定rtmp头文件查找目录
+#include_directories(librtmp)
+#include_directories(libx264/include)
+
+#-L 库的查找路径  -D 定义宏
+#目录是全是.c文件需要使用cmake_c_flags ,如果目录存在一个.cpp那就得用cmake_cxx_flages
+#链接jniLibs目录下的ffmpeg的静态库,链接x264静态库
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/ffmpeg/${CMAKE_ANDROID_ARCH_ABI}")
 
 include_directories(lib_res)
 
@@ -37,7 +45,9 @@ target_link_libraries(
         -Wl,--end-group
         log
         z
+        rtmp
         android
         OpenSLES
+#        x264
 )
 #------------- ffmpeg-----------------

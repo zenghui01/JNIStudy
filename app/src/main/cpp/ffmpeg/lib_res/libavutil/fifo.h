@@ -84,7 +84,7 @@ int av_fifo_size(const AVFifoBuffer *f);
 int av_fifo_space(const AVFifoBuffer *f);
 
 /**
- * Feed data at specific position from an AVFifoBuffer to a user-supplied loadSuccessCallback.
+ * Feed data at specific position from an AVFifoBuffer to a user-supplied callback.
  * Similar as av_fifo_gereric_read but without discarding data.
  * @param f AVFifoBuffer to read from
  * @param offset offset from current read position
@@ -95,7 +95,7 @@ int av_fifo_space(const AVFifoBuffer *f);
 int av_fifo_generic_peek_at(AVFifoBuffer *f, void *dest, int offset, int buf_size, void (*func)(void*, void*, int));
 
 /**
- * Feed data from an AVFifoBuffer to a user-supplied loadSuccessCallback.
+ * Feed data from an AVFifoBuffer to a user-supplied callback.
  * Similar as av_fifo_gereric_read but without discarding data.
  * @param f AVFifoBuffer to read from
  * @param buf_size number of bytes to read
@@ -105,7 +105,7 @@ int av_fifo_generic_peek_at(AVFifoBuffer *f, void *dest, int offset, int buf_siz
 int av_fifo_generic_peek(AVFifoBuffer *f, void *dest, int buf_size, void (*func)(void*, void*, int));
 
 /**
- * Feed data from an AVFifoBuffer to a user-supplied loadSuccessCallback.
+ * Feed data from an AVFifoBuffer to a user-supplied callback.
  * @param f AVFifoBuffer to read from
  * @param buf_size number of bytes to read
  * @param func generic read function
@@ -114,7 +114,7 @@ int av_fifo_generic_peek(AVFifoBuffer *f, void *dest, int buf_size, void (*func)
 int av_fifo_generic_read(AVFifoBuffer *f, void *dest, int buf_size, void (*func)(void*, void*, int));
 
 /**
- * Feed data from a user-supplied loadSuccessCallback to an AVFifoBuffer.
+ * Feed data from a user-supplied callback to an AVFifoBuffer.
  * @param f AVFifoBuffer to write to
  * @param src data source; non-const since it may be used as a
  * modifiable context by the function defined in func

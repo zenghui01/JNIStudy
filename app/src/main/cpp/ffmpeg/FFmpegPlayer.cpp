@@ -40,9 +40,9 @@ void FFmpegPlayer::player_prepare() {
     //1.分配一个影音格式上下文。
     avContext = avformat_alloc_context();
     //影音字典
-    AVDictionary *avDictionary = 0;
-    //字典中设置值
-    av_dict_set(&avDictionary, "timeout", "5000000", 0);
+    AVDictionary *dictionary = 0;
+    //设置超时（5秒）
+    av_dict_set(&dictionary, "timeout", "5000000", 0);//单位微秒
     //2.打开一个视频流
     /**
      *1.AVFormatContext
@@ -50,15 +50,19 @@ void FFmpegPlayer::player_prepare() {
      *3.fmt:文件封装格式,0表示自动识别
      *4.字典:参数
      */
-    int retCode = avformat_open_input(&avContext, this->data_source, 0, &avDictionary);
+    int retCode = avformat_open_input(&avContext, data_source, 0, &dictionary);
     //释放已用完字典
-    av_dict_free(&avDictionary);
+    av_dict_free(&dictionary);
+    LOGE("sssll111222%d", retCode);
     if (retCode) {
+        avformat_close_input(&avContext);
+        avContext = 0;
         //如果retcode不等于0返回报错
         //源码提示:@return 0 on success, a negative AVERROR on failure.
         onError(retCode, av_err2str(retCode));
         return;
     }
+    LOGE("sssll111");
     retCode = avformat_find_stream_info(avContext, 0);
     if (retCode < 0) {
         //如果返回值小于0返回报错
@@ -66,6 +70,7 @@ void FFmpegPlayer::player_prepare() {
         onError(retCode, av_err2str(retCode));
         return;
     }
+    LOGE("sssll");
     //轮询avFormatContext中的流个数
     for (int stream_index = 0; stream_index < avContext->nb_streams; ++stream_index) {
         //获取avFormatContext中的流
@@ -154,25 +159,27 @@ void FFmpegPlayer::player_start() {
             av_usleep(10 * 1000);//microseconds
             continue;
         }
-        hasPlayComplete = 0;
-        if (hasReadEnd) {
-            //已经读完了,要考虑是否播放完
-            int playing = 0;
-            if (video_channel) {
-                if (video_channel->isPlaying) {
-                    playing = 1;
+        if (getDuration() > 0) {
+            hasPlayComplete = 0;
+            if (hasReadEnd) {
+                //已经读完了,要考虑是否播放完
+                int playing = 0;
+                if (video_channel) {
+                    if (video_channel->isPlaying) {
+                        playing = 1;
+                    }
                 }
-            }
-            if (audio_channel) {
-                if (audio_channel->isPlaying) {
-                    playing = 1;
+                if (audio_channel) {
+                    if (audio_channel->isPlaying) {
+                        playing = 1;
+                    }
                 }
+                if (!playing) {
+                    LOGE("文件全部读取完成");
+                    break;
+                }
+                continue;
             }
-            if (!playing) {
-                LOGE("文件全部读取完成");
-                break;
-            }
-            continue;
         }
         AVPacket *packet = av_packet_alloc();
         pthread_mutex_lock(&seek_mutex);
@@ -220,6 +227,10 @@ void FFmpegPlayer::prepare() {
 
 
 void FFmpegPlayer::start() {
+//    if (!avContext) {
+//        onError(-100, "视频加载失败");
+//        return;
+//    }
     if (isPlaying) {
         return;
     }

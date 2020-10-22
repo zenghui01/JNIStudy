@@ -59,9 +59,10 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
 
         }
         mPlayer = FFmpegPlayer()
-        val filePath = File(
-            Environment.getExternalStorageDirectory().toString() + File.separator + "demo.mp4"
-        ).absolutePath
+//        val filePath = File(
+//            Environment.getExternalStorageDirectory().toString() + File.separator + "demo.mp4"
+//        ).absolutePath
+        val filePath = "rtmp://150.158.152.202/myapp/";
         if (TextUtils.isEmpty(filePath)) {
             toast("视频文件异常")
             return
@@ -95,7 +96,7 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
             })
             setProgressListener {
                 runOnUiThread {
-                    if (!isTouch) {
+                    if (!isTouch && mDuration != 0) {
                         tvDuration.text = "${getTime(it)}:${getTime(mDuration)}"
                         seek_bar.progress = 100 * it / mDuration
                     }

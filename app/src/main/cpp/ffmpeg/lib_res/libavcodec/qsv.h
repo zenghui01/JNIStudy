@@ -30,7 +30,7 @@
  * the caller. It is managed by the caller and must be assigned to
  * AVCodecContext.hwaccel_context.
  * - decoding: hwaccel_context must be set on return from the get_format()
- *             loadSuccessCallback
+ *             callback
  * - encoding: hwaccel_context must be set before avcodec_open2()
  */
 typedef struct AVQSVContext {
