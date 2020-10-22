@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.SurfaceView
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import com.testndk.jnistudy.R
@@ -21,6 +22,8 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
     lateinit var mPlayer: FFmpegPlayer
     lateinit var ivPlay: ImageView
     lateinit var ivReplay: ImageView
+    lateinit var llProgress: LinearLayout
+    lateinit var tvNotice: TextView
     var mDuration = 0
     private var isTouch = false
 
@@ -35,6 +38,8 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
         tvDuration = findViewById(R.id.tvDuration)
         ivPlay = findViewById(R.id.ivPlay)
         ivReplay = findViewById(R.id.ivReplay)
+        llProgress = findViewById(R.id.llProgress)
+        tvNotice = findViewById(R.id.tvNotice)
         ivReplay.apply {
             tag = 0
             setOnClickListener {
@@ -53,7 +58,6 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
                 mPlayer.pause()
             } else {
                 ivPlay.isSelected = true
-
                 mPlayer.start()
             }
 
@@ -73,7 +77,17 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
             setPrepareListener {
                 mDuration = it
                 runOnUiThread {
-                    tvDuration.text = "00:00/00:${getTime(it)}"
+                    if (mDuration == 0) {
+                        llProgress.visibility = View.INVISIBLE
+                        ivReplay.visibility = View.GONE
+                        tvNotice.text = "正在直播"
+                    } else {
+                        ivReplay.visibility = View.VISIBLE
+                        llProgress.visibility = View.VISIBLE
+                        tvNotice.text = "本地视频/网络视频"
+                        tvDuration.text = "00:00/00:${getTime(it)}"
+                    }
+                    tvNotice.visibility = View.VISIBLE
                     ivPlay.isSelected = false
                 }
             }
