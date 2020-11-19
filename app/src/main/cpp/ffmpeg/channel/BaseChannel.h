@@ -9,7 +9,7 @@ extern "C" {
 #include <libavutil/time.h>
 };
 
-#include "../safe_queue.h"
+#include "../../safe_queue.h"
 #include "../../macro.h"
 #include <pthread.h>
 #include "../java_callback/JavaProgressCallback.h"
@@ -60,14 +60,14 @@ public:
     static void releaseAvPacket(AVPacket **packet) {
         if (packet) {
             av_packet_free(packet);
-            *packet = 0;
+            DELETE(*packet)
         }
     }
 
     static void releaseAvFrame(AVFrame **frame) {
         if (frame) {
             av_frame_free(frame);
-            *frame = 0;
+            DELETE(*frame)
         }
     }
 

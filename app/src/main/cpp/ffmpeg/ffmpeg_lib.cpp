@@ -26,8 +26,9 @@ void renderFrame(uint8_t *src_data, int w, int h, int src_lineSize) {
     pthread_mutex_lock(&mutex);
     if (!window) {
         // todo 窗口初始化失败????
-        player->stop();
+        LOGE("窗口初始化失败")
         pthread_mutex_unlock(&mutex);
+        player->stop();
         return;
     }
     //设置窗口属性
@@ -112,7 +113,7 @@ Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_stopNative(JNIEnv *env, jobject
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_testndk_jnistudy_ui_ffmpeg_FFmpegPlayer_releaseNative(JNIEnv *env, jobject thiz) {
-
+    pthread_mutex_destroy(&mutex);
 }
 
 extern "C"

@@ -57,6 +57,7 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
     }
 
     public void start() {
+        LogUtils.eLog("点击播放按钮");
         startNative();
     }
 
@@ -134,13 +135,13 @@ public class FFmpegPlayer implements SurfaceHolder.Callback {
     }
 
     public void setSurface(SurfaceView surface) {
+        LogUtils.eLog("setSurface");
+        surfaceHolder = surface.getHolder();
+        // TODO: 2020/9/21 不回调 surfaceChanged???
         if (surfaceHolder != null) {
             surfaceHolder.removeCallback(this);
+            surfaceHolder.addCallback(this);
         }
-        surfaceHolder = surface.getHolder();
-        LogUtils.eLog("setSurface");
-        // TODO: 2020/9/21 不回调 surfaceChanged???
-        setSurfaceNative(surfaceHolder.getSurface());
     }
 
 

@@ -22,12 +22,14 @@ class FirstActivity : BaseActivity() {
 
     private fun initPermission() {
         if ((!permissions.isGranted(Manifest.permission.CAMERA) || !permissions.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    || !permissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    || !permissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) || !permissions.isGranted(
+                Manifest.permission.RECORD_AUDIO
+            ))
         ) {
             mDisposable.add(permissions.requestEach(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
+                Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
             ).subscribe {
                 if (isEquals(it.name, Manifest.permission.CAMERA)) {
 
@@ -95,5 +97,9 @@ class FirstActivity : BaseActivity() {
 
     fun onClickFmod(view: View) {
         start(FmodActivity::class.java)
+    }
+
+    fun onClickRTMP(view: View) {
+        start(RTMPActivity::class.java)
     }
 }

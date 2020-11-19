@@ -5,10 +5,7 @@ import android.os.Environment
 import android.text.TextUtils
 import android.view.SurfaceView
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import com.testndk.jnistudy.R
 import com.testndk.jnistudy.ui.ffmpeg.FFmpegPlayer
 import com.testndk.jnistudy.utils.toast
@@ -16,7 +13,7 @@ import java.io.File
 
 class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
     private var isSeek = false;
-    lateinit var surface: SurfaceView
+    lateinit var flParent: FrameLayout
     lateinit var seek_bar: SeekBar
     lateinit var tvDuration: TextView
     lateinit var mPlayer: FFmpegPlayer
@@ -33,13 +30,15 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
 
     override fun initView() {
         super.initView()
-        surface = findViewById(R.id.surface)
+        val surfaceView = SurfaceView(this);
+        flParent = findViewById(R.id.flParent)
         seek_bar = findViewById(R.id.seek_bar)
         tvDuration = findViewById(R.id.tvDuration)
         ivPlay = findViewById(R.id.ivPlay)
         ivReplay = findViewById(R.id.ivReplay)
         llProgress = findViewById(R.id.llProgress)
         tvNotice = findViewById(R.id.tvNotice)
+        flParent.addView(surfaceView)
         ivReplay.apply {
             tag = 0
             setOnClickListener {
@@ -66,13 +65,13 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
 //        val filePath = File(
 //            Environment.getExternalStorageDirectory().toString() + File.separator + "demo.mp4"
 //        ).absolutePath
-        val filePath = "rtmp://150.158.152.202/myapp/";
+        val filePath = "rtmp://47.96.225.33/myapp/";
         if (TextUtils.isEmpty(filePath)) {
             toast("视频文件异常")
             return
         }
         mPlayer.run {
-            setSurface(surface)
+            setSurface(surfaceView)
             setDataSource(filePath)
             setPrepareListener {
                 mDuration = it

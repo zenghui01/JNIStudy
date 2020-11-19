@@ -32,6 +32,7 @@ FFmpegPlayer::FFmpegPlayer(const char *data_source_) {
 }
 
 FFmpegPlayer::~FFmpegPlayer() {
+    pthread_mutex_destroy(&seek_mutex);
     DELETE(data_source)
 }
 
@@ -53,7 +54,7 @@ void FFmpegPlayer::player_prepare() {
     int retCode = avformat_open_input(&avContext, data_source, 0, &dictionary);
     //释放已用完字典
     av_dict_free(&dictionary);
-    LOGE("sssll111222%d", retCode);
+    LOGE("打开视频流地址")
     if (retCode) {
         avformat_close_input(&avContext);
         avContext = 0;
@@ -62,11 +63,12 @@ void FFmpegPlayer::player_prepare() {
         onError(retCode, av_err2str(retCode));
         return;
     }
-    LOGE("sssll111");
     retCode = avformat_find_stream_info(avContext, 0);
+    LOGE("获取流信息")
     if (retCode < 0) {
         //如果返回值小于0返回报错
         //源码提示:@return >=0 if OK, AVERROR_xxx on error
+        LOGE("sss 报错了");
         onError(retCode, av_err2str(retCode));
         return;
     }
@@ -251,6 +253,7 @@ void FFmpegPlayer::start() {
         audio_channel->start();
         audio_channel->setProgressCallback(progressCallback);
     }
+    LOGE("准备解析avpackte");
     //开始播放需要对视频avparket进行解析,属于耗时操作所以放在子线程中
     pthread_create(&pid_start, 0, task_start, this);
 }
@@ -285,6 +288,13 @@ void *task_stop(void *args) {
  */
 void FFmpegPlayer::stop() {
     isPlaying = 0;
+    if (audio_channel) {
+        audio_channel->stop();
+    }
+    if (video_channel) {
+        video_channel->stop();
+    }
+    pthread_create(&pid_stop, 0, task_stop, this);
     //置空加载成功回调
     if (loadSuccessCallback) {
         DELETE(loadSuccessCallback)
@@ -305,7 +315,6 @@ void FFmpegPlayer::stop() {
     if (completeCallback) {
         DELETE(completeCallback)
     }
-    pthread_create(&pid_stop, 0, task_stop, this);
 }
 
 void FFmpegPlayer::release() {

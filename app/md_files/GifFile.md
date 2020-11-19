@@ -50,7 +50,7 @@ https://www.w3.org/Graphics/GIF/spec-gif89a.txt
 固定由7字节组成。
 
 |字节|描述|
-|:--|-|
+|-|-|
 | １-２ |Canvas Width：表示 GIF 图像的宽度，单位是像素。<br />如：0A00 = 10(十进制)，表示图像宽度为10像素。|
 |3-4|Canvas Height：表示 GIF 图像的高度，单位是像素。<br />如：0A00 = 10(十进制)，表示图像高度为10像素。|
 |5|Packed Field：这是一个包装字段，内部的不同 bit（位）表示有不同的含义。<br /><br />从左边数第一位表示 Global Color Table Flag，如果其为 1 ，则表示存在 Global Color Table。如果为 0，则没有 Global Color Table。<br /><br />从左边数第二、三、四位表示 Color Resolution，用于表示色彩分辨率，如果为 s，则 Global Color Table 的颜色数为 2^(s+1)个，如果这是 s = 1,则一共有 4 种颜色，即每个像素可以用 2位（二进制） 来表示。<br /><br />从左边数第五位表示 Sort Flag，它有两个值 0 或 1。如果为 0 则 Global Color Table 不进行排序，为 1 则表示 Global Color Table 按照降序排列，出现频率最多的颜色排在最前面。<br /><br />最右边三位表示 Global Color Table 的颜色数，如其值为 s，则全局列表颜色个数的计算公式为 2^(s+1)。如 s = 1，则 Global Color Table 包含 4 个颜色。|
