@@ -3,6 +3,7 @@
 
 #include "art_5_1.h"
 //#include "art_4_4.h"
+using namespace art::mirror;
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_testndk_jnistudy_MainActivity_stringFromJNI(
@@ -17,18 +18,18 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_testndk_jnistudy_ui_andfix_DexManager_replace(JNIEnv *env, jobject thiz,
                                                        jobject fix_method, jobject bug_method) {
-    art::mirror::ArtMethod *dmeth = reinterpret_cast<art::mirror::ArtMethod *>(env->FromReflectedMethod(
+    ArtMethod *dmeth = reinterpret_cast<ArtMethod *>(env->FromReflectedMethod(
             fix_method));
-    art::mirror::ArtMethod *smeth = reinterpret_cast<art::mirror::ArtMethod *>(env->FromReflectedMethod(
+    ArtMethod *smeth = reinterpret_cast<ArtMethod *>(env->FromReflectedMethod(
             bug_method));
-    reinterpret_cast<art::mirror::Class *>(dmeth->declaring_class_)->class_loader_ =
-            reinterpret_cast<art::mirror::Class *>(smeth->declaring_class_)->class_loader_; //for plugin classloader
-    reinterpret_cast<art::mirror::Class *>(dmeth->declaring_class_)->clinit_thread_id_ =
-            reinterpret_cast<art::mirror::Class *>(smeth->declaring_class_)->clinit_thread_id_;
-    reinterpret_cast<art::mirror::Class *>(dmeth->declaring_class_)->status_ =
-            reinterpret_cast<art::mirror::Class *>(smeth->declaring_class_)->status_ - 1;
+    reinterpret_cast<Class *>(dmeth->declaring_class_)->class_loader_ =
+            reinterpret_cast<Class *>(smeth->declaring_class_)->class_loader_; //for plugin classloader
+    reinterpret_cast<Class *>(dmeth->declaring_class_)->clinit_thread_id_ =
+            reinterpret_cast<Class *>(smeth->declaring_class_)->clinit_thread_id_;
+    reinterpret_cast<Class *>(dmeth->declaring_class_)->status_ =
+            reinterpret_cast<Class *>(smeth->declaring_class_)->status_ - 1;
     //for reflection invoke
-    reinterpret_cast<art::mirror::Class *>(dmeth->declaring_class_)->super_class_ = 0;
+    reinterpret_cast<Class *>(dmeth->declaring_class_)->super_class_ = 0;
 
     smeth->declaring_class_ = dmeth->declaring_class_;
     smeth->dex_cache_resolved_types_ = dmeth->dex_cache_resolved_types_;

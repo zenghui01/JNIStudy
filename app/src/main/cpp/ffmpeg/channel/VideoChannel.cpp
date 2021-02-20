@@ -91,7 +91,7 @@ void VideoChannel::videoPlay() {
     //给dst_data分配内存
     av_image_alloc(dst_data, dst_linesize, codecContext->width, codecContext->height,
                    AV_PIX_FMT_RGBA, 1);
-
+    AVFrame *avFrame = av_frame_alloc();
     while (isPlaying) {
         int ret = frames.pop(frame);
         if (!isPlaying) {
