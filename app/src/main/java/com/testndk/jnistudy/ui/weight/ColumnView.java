@@ -174,7 +174,9 @@ public class ColumnView extends LinearLayout {
             mIvLeft.setLayoutParams(layoutParams);
         }
         if (null == leftDraw) {
-            mIvLeft.setVisibility(GONE);
+            if (mIvLeft!=null) {
+                mIvLeft.setVisibility(GONE);
+            }
         } else {
             mIvLeft.setImageDrawable(leftDraw);
         }

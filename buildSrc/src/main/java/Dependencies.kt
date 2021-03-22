@@ -2,10 +2,10 @@
  * android buildSrc
  */
 object Versions {
-    val compileSdkVersion = 29
-    val buildToolsVersion = "29.0.2"
+    val compileSdkVersion = 28
+    val buildToolsVersion = "28.0.2"
     val minSdkVersion = 21
-    val targetSdkVersion = 29
+    val targetSdkVersion = 28
     val versionCode = 2
     val versionName = "v2.0"
 }

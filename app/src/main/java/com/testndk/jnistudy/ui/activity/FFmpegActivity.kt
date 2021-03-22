@@ -1,15 +1,18 @@
 package com.testndk.jnistudy.ui.activity
 
+import android.content.Intent
 import android.graphics.Color
-import android.os.Environment
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.SurfaceView
 import android.view.View
 import android.widget.*
 import com.testndk.jnistudy.R
 import com.testndk.jnistudy.ui.ffmpeg.FFmpegPlayer
+import com.testndk.jnistudy.utils.LogUtils
+import com.testndk.jnistudy.utils.UriUtil
 import com.testndk.jnistudy.utils.toast
-import java.io.File
+import java.util.*
 
 class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
     private var isSeek = false;
@@ -21,8 +24,11 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
     lateinit var ivReplay: ImageView
     lateinit var llProgress: LinearLayout
     lateinit var tvNotice: TextView
+    lateinit var tvSelect: Button
+    lateinit var surfaceView: SurfaceView
     var mDuration = 0
     private var isTouch = false
+    private val REQUEST_CODE_SELECT = 112
 
     override fun initLayout(): Int {
         return R.layout.activity_ffmpeg
@@ -30,7 +36,7 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
 
     override fun initView() {
         super.initView()
-        val surfaceView = SurfaceView(this);
+        surfaceView = SurfaceView(this);
         flParent = findViewById(R.id.flParent)
         seek_bar = findViewById(R.id.seek_bar)
         tvDuration = findViewById(R.id.tvDuration)
@@ -38,6 +44,7 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
         ivReplay = findViewById(R.id.ivReplay)
         llProgress = findViewById(R.id.llProgress)
         tvNotice = findViewById(R.id.tvNotice)
+        tvSelect = findViewById(R.id.tvSelect)
         flParent.addView(surfaceView)
         ivReplay.apply {
             tag = 0
@@ -61,15 +68,19 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
             }
 
         }
+        tvSelect.setOnClickListener {
+            val i = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(i, REQUEST_CODE_SELECT)
+        }
         mPlayer = FFmpegPlayer()
 //        val filePath = File(
 //            Environment.getExternalStorageDirectory().toString() + File.separator + "demo.mp4"
 //        ).absolutePath
-        val filePath = "rtmp://47.96.225.33/myapp/";
-        if (TextUtils.isEmpty(filePath)) {
-            toast("视频文件异常")
-            return
-        }
+//        val filePath = "rtmp://47.96.225.33/myapp/";
+
+    }
+
+    fun playVideo(filePath: String) {
         mPlayer.run {
             setSurface(surfaceView)
             setDataSource(filePath)
@@ -119,6 +130,18 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
         }
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        data?.let {
+            if (requestCode == REQUEST_CODE_SELECT && resultCode == RESULT_OK && null != data) {
+                val uri = data.data
+                LogUtils.eLog(uri, uri)
+                val path = UriUtil.getPath(this, uri)
+                playVideo(path)
+            }
+        }
+    }
 
     private fun getTime(duration: Int): String {
         return getMinutes(duration) + ":" + getSeconds(duration)

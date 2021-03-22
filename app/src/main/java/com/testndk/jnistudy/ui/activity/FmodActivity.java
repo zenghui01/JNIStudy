@@ -1,9 +1,12 @@
 package com.testndk.jnistudy.ui.activity;
 
+import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 
 import com.testndk.jnistudy.R;
-import com.testndk.jnistudy.ui.fmod.FmodUtils;
+
+import org.fmod.FMOD;
 
 public class FmodActivity extends BaseActivity {
     @Override
@@ -20,7 +23,18 @@ public class FmodActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        FmodUtils.close();
+        stopPlayVoice();
+        FMOD.close();
+        handler = null;
+    }
+
+    public void onFomdCallback(String s) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                tvNotice.append(s + "\n");
+            }
+        });
     }
 
     public void onClickNormal(View view) {
@@ -40,4 +54,12 @@ public class FmodActivity extends BaseActivity {
 
     public void onClickKongling(View view) {
     }
+
+    public void onCLickStop(View view) {
+        stopPlayVoice();
+    }
+
+    public native void playVoice(int model, String path);
+
+    public native void stopPlayVoice();
 }

@@ -12,6 +12,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import com.testndk.jnistudy.R
 import com.testndk.jnistudy.ui.andfix.DexManager
 import com.testndk.jnistudy.ui.andfix.error.Calculator
+import com.testndk.jnistudy.utils.toast
 import dalvik.system.DexClassLoader
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -47,7 +48,7 @@ class MainActivity : BaseActivity() {
 
     companion object {
         init {
-            System.loadLibrary("native-lib")
+            System.loadLibrary("hotfix-lib")
         }
     }
 
@@ -61,7 +62,12 @@ class MainActivity : BaseActivity() {
 
     fun onClickFix(view: View) {
         DexManager.getInstance().setContext(this)
-        DexManager.getInstance()
-            .loadDex(File(Environment.getExternalStorageDirectory().path, "out.dex"))
+        val file = File(Environment.getExternalStorageDirectory().path, "out.dex");
+        if (file.exists()) {
+            DexManager.getInstance()
+                .loadDex(file)
+        } else {
+            toast("补丁包不存在")
+        }
     }
 }

@@ -8,7 +8,7 @@
 #include "PushAudioChannel.h"
 #include "../safe_queue.h"
 #include "librtmp/rtmp.h"
-#include "VideoChannel.h"
+//#include "VideoChannel.h"
 
 
 extern "C" JNIEXPORT jstring JNICALL

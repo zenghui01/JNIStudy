@@ -207,7 +207,7 @@ void PushVideoChannel::encodeData(int8_t *data) {
  * pictureParameterSetNALUnits  pps长度      pps内容
  *
  */
-void PushVideoChannel::sendSpsPps(uint8_t *sps, uint8_t *pps, int sps_len, int pps_len) {
+void PushVideoChannel:: sendSpsPps(uint8_t *sps, uint8_t *pps, int sps_len, int pps_len) {
     //组 RTMPPacket 包
     RTMPPacket *packet = new RTMPPacket;
     int body_size = 5 + 8 + sps_len + 3 + pps_len;

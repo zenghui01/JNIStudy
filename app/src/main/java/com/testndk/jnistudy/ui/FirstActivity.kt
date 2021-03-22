@@ -102,4 +102,20 @@ class FirstActivity : BaseActivity() {
     fun onClickRTMP(view: View) {
         start(RTMPActivity::class.java)
     }
+
+    fun onClickCastService(view: View) {
+        start(CastServiceActivity::class.java)
+    }
+
+    fun onclickCastClient(view: View) {
+        start(CastClientActivity::class.java)
+    }
+
+    fun onclickMediaExtra(view: View) {
+        start(VideoCompositionActivity::class.java)
+    }
+
+    fun onclickVideoMixing(view: View) {
+        start(VideoMixingActivity::class.java)
+    }
 }

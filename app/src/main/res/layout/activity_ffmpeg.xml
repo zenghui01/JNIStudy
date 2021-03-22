@@ -8,12 +8,25 @@
 
     <FrameLayout
         android:id="@+id/flParent"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintDimensionRatio="9:16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editPath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="rtmp://47.96.225.33/myapp/"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/flParent" />
 
     <ImageView
         android:id="@+id/ivPlay"
@@ -36,10 +49,21 @@
         app:layout_constraintStart_toEndOf="@id/ivPlay"
         app:layout_constraintTop_toBottomOf="@id/llProgress" />
 
+    <Button
+        android:id="@+id/tvSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择视频"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivPlay" />
+
     <LinearLayout
         android:id="@+id/llProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:paddingStart="15dp"
         android:paddingTop="10dp"

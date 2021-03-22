@@ -73,6 +73,8 @@ dependencies {
     testImplementation TestModel.junit
     //aspect
     implementation 'org.aspectj:aspectjrt:1.8.13'
+    //socket
+    implementation "org.java-websocket:Java-WebSocket:1.4.0"
 }
 
 
