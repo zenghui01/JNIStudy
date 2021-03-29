@@ -34,7 +34,7 @@ public class CodecLiveH265 extends CodecLive {
             mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
             onProgress("设置采集编码颜色");
             mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, width * height);
-            onProgress("设置码流");
+            onProgress("设置码率");
             mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 20);
             onProgress("设置帧数");
             //设置i帧间隔

@@ -31,18 +31,6 @@ public class TestAspectActivity extends BaseActivity {
         super.initView();
         ssImg = findViewById(R.id.ssImg);
         ssImg.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
-        Glide.with(TestAspectActivity.this).asBitmap().load("https://cdn.diandi.club/image/159056144500020_i.png").into(new CustomTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                ssImg.setImage(ImageSource.cachedBitmap(resource));
-            }
-
-            @Override
-            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-            }
-        });
-
     }
 
     @TestAnnotation

@@ -75,6 +75,10 @@ dependencies {
     implementation 'org.aspectj:aspectjrt:1.8.13'
     //socket
     implementation "org.java-websocket:Java-WebSocket:1.4.0"
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 }
 
 
