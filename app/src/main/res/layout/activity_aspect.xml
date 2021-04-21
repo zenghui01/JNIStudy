@@ -9,9 +9,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClickAspect"
-        android:text="sssss"
+        android:text="权限申请"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onTestHandler"
+        android:text="测试handler" />
 
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/ssImg"

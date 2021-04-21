@@ -1,4 +1,4 @@
-package com.testndk.jnistudy.annotation;
+package com.testndk.jnistudy.aspect.annotation;
 
 
 import java.lang.annotation.ElementType;

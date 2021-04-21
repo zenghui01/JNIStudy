@@ -94,7 +94,15 @@
             android:name=".ui.activity.VideoCompositionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".ui.activity.VideoMixingActivity" />
+        <activity
+            android:name=".ui.activity.VideoMixingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".ui.activity.MyPermissionActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

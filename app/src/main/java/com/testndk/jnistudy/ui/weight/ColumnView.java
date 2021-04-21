@@ -186,17 +186,19 @@ public class ColumnView extends LinearLayout {
             mIvLeft.setVisibility(GONE);
         }
         //设置右边文字
-        mTvRight.setText(rightText);
-        if (rightTextColor != 0) {
-            mTvRight.setTextColor(rightTextColor);
-        }
-        if (rightTextSize != 0) {
-            mTvRight.setTextSize(rightTextSize);
-        }
-        if (rightTextVisible == 1) {
-            mTvRight.setVisibility(VISIBLE);
-        } else if (rightTextVisible == 2) {
-            mTvRight.setVisibility(GONE);
+        if(mTvRight!=null){
+            mTvRight.setText(rightText);
+            if (rightTextColor != 0) {
+                mTvRight.setTextColor(rightTextColor);
+            }
+            if (rightTextSize != 0) {
+                mTvRight.setTextSize(rightTextSize);
+            }
+            if (rightTextVisible == 1) {
+                mTvRight.setVisibility(VISIBLE);
+            } else if (rightTextVisible == 2) {
+                mTvRight.setVisibility(GONE);
+            }
         }
         //设置右边图片
         if (rightDrawSize != 0) {

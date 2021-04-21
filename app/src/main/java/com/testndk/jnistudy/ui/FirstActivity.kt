@@ -3,9 +3,11 @@ package com.testndk.jnistudy.ui
 import android.Manifest
 import android.content.Intent
 import android.view.View
+import android.widget.TextView
 import com.tbruyelle.rxpermissions2.RxPermissions
+import com.testndk.jnistudy.BuildConfig
 import com.testndk.jnistudy.R
-import com.testndk.jnistudy.annotation.TestAnnotation
+import com.testndk.jnistudy.aspect.annotation.TestAnnotation
 import com.testndk.jnistudy.ui.activity.*
 import com.testndk.jnistudy.utils.isEquals
 
@@ -17,6 +19,7 @@ class FirstActivity : BaseActivity() {
 
     override fun initView() {
         super.initView()
+        findViewById<TextView>(R.id.tvUrl).text = "当前环境 ${BuildConfig.app_url}"
         initPermission()
     }
 
