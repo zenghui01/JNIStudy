@@ -56,48 +56,23 @@ public class FmodActivity extends BaseActivity {
     }
 
     public void onClickNormal(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                playVoice(MODEL_NORMAL, file_path);
-            }
-        }).start();
+        new Thread(() -> playVoice(MODEL_NORMAL, file_path)).start();
     }
 
     public void onClickLuoli(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                playVoice(MODEL_LUOLI, file_path);
-            }
-        }).start();
+        new Thread(() -> playVoice(MODEL_LUOLI, file_path)).start();
     }
 
     public void onClickDashu(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                playVoice(MODEL_DASHU, file_path);
-            }
-        }).start();
+        new Thread(() -> playVoice(MODEL_DASHU, file_path)).start();
     }
 
     public void onClickJingsong(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                playVoice(MODEL_JINGSONG, file_path);
-            }
-        }).start();
+        new Thread(() -> playVoice(MODEL_JINGSONG, file_path)).start();
     }
 
     public void onClickGaoguai(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                playVoice(MODEL_GAOGUAI, file_path);
-            }
-        }).start();
+        new Thread(() -> playVoice(MODEL_GAOGUAI, file_path)).start();
     }
 
     public void onClickKongling(View view) {

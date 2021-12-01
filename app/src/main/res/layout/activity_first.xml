@@ -82,7 +82,7 @@
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="Jni加载GIF" />
+            app:left_text="Jni 加载 GIF" />
 
         <!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
         <!--            android:layout_width="match_parent"-->
@@ -100,7 +100,7 @@
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="Fmod变声" />
+            app:left_text="Fmod 变声" />
 
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="FFmpeg播放视频" />
+            app:left_text="FFmpeg 播放视频" />
 
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
@@ -118,7 +118,7 @@
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="FFmpeg + RTMP推流" />
+            app:left_text="FFmpeg + RTMP 推流" />
 
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
@@ -127,7 +127,7 @@
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="MediaCodec投屏服务端" />
+            app:left_text="MediaCodec 投屏服务端" />
 
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
@@ -136,7 +136,7 @@
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="MediaCodec投屏客户端" />
+            app:left_text="MediaCodec 投屏客户端" />
 
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
@@ -145,7 +145,7 @@
             app:bottom_line_margin="left"
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
-            app:left_text="MediaExtractor实现视频音频合成" />
+            app:left_text="MediaExtractor 实现视频音频合成" />
 
         <!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
         <!--            android:layout_width="match_parent"-->
@@ -155,5 +155,23 @@
         <!--            app:bottom_line_margin_size="20dp"-->
         <!--            app:bottom_line_visibility="visible"-->
         <!--            app:left_text="MediaExtractor视频音频混音" />-->
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickKtor"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="Ktor" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickWorkManager"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="WorkManager" />
     </LinearLayout>
 </ScrollView>

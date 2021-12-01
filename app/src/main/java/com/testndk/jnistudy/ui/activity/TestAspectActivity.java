@@ -21,59 +21,12 @@ public class TestAspectActivity extends BaseActivity {
 
     @Override
     public int initLayout() {
-
         return R.layout.activity_aspect;
     }
 
     @Override
     public void initView() {
         super.initView();
-//        ssImg = findViewById(R.id.ssImg);
-//        ssImg.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
-    }
-
-    int a = 11;
-    private static Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
-
-    public void onTestHandler(View view) {
-        LogUtils.eLog("点击了");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LogUtils.eLog("跑了");
-//                Looper.prepare();
-                LogUtils.eLog(Thread.currentThread());
-                Handler handler = new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        super.handleMessage(msg);
-
-                        LogUtils.eLog("handleMessage", msg, a = msg.arg1);
-                    }
-
-                    @Override
-                    public void dispatchMessage(Message msg) {
-                        super.dispatchMessage(msg);
-                        LogUtils.eLog("11:", msg, a = msg.arg1);
-                    }
-                };
-                LogUtils.eLog("Handler");
-
-                LogUtils.eLog("Looper");
-                Message message = new Message();
-                message.arg1 = 1;
-                message.arg2 = 2;
-                message.obj = "你好";
-                handler.sendMessage(message);
-                LogUtils.eLog("发送结束了");
-//                Looper.loop();
-            }
-        }).start();
     }
 
     @Permission(value = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}

@@ -121,4 +121,12 @@ class FirstActivity : BaseActivity() {
     fun onclickVideoMixing(view: View) {
         start(VideoMixingActivity::class.java)
     }
+
+    fun onClickKtor(view: View) {
+        start(KtorActivity::class.java)
+    }
+
+    fun onClickWorkManager(view: View) {
+        start(WorkManagerActivity::class.java)
+    }
 }

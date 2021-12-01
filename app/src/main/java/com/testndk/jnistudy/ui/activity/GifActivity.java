@@ -47,7 +47,9 @@ public class GifActivity extends BaseActivity {
     }
 
     public void loadGif(View view) {
-        Glide.with(this).download("https://n.sinaimg.cn/tech/transform/481/w221h260/20200902/a072-iypetiv5742891.gif").into(new CustomTarget<File>() {
+        Glide.with(this).download(
+                "https://n.sinaimg.cn/tech/transform/481/w221h260/20200902/a072-iypetiv5742891.gif"
+        ).into(new CustomTarget<File>() {
             @Override
             public void onResourceReady(@NonNull File resource, @Nullable Transition<? super File> transition) {
                 new NativeTask().execute(resource);

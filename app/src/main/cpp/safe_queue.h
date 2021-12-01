@@ -1,8 +1,8 @@
 #ifndef JNISTUDY_SAFE_QUEUE_H
 #define JNISTUDY_SAFE_QUEUE_H
 
-#include "../../../../../../Library/Android/sdk/ndk/20.1.5948944/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/queue"
-#include "../../../../../../Library/Android/sdk/ndk/20.1.5948944/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/pthread.h"
+#include "queue"
+#include "pthread.h"
 #include "macro.h"
 
 using namespace std;

@@ -28,7 +28,8 @@ public class MyPermissionActivity extends Activity {
 
     private String[] permissions;
     private int requestCode;
-    private static IPermission permissionListener; // 这个Activity  已经授权，取消授权，被拒绝授权
+    // 这个Activity  已经授权，取消授权，被拒绝授权
+    private static IPermission permissionListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +46,8 @@ public class MyPermissionActivity extends Activity {
         }
         // 能走到这里，就开始去检查，是否已经授权了
         boolean permissionRequest = PermissionUtils.hasPermissionRequest(this, permissions);
-        if (permissionRequest) { // 已经授权了，无需在申请
+        // 已经授权了，无需在申请
+        if (permissionRequest) {
             // 通过监听接口，告诉外界，已经授权了
             permissionListener.ganted();
             this.finish();
@@ -56,14 +58,20 @@ public class MyPermissionActivity extends Activity {
     }
 
 
-    // 申请权限之后的结果 方法
+    /**
+     * 申请权限之后的结果 方法
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) { // grantResults.length = 3
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        // 返回的结果，需要去验证一下，是否完全成功了
-        if (PermissionUtils.requestPermissionSuccess(grantResults)) { // 真正申请成功了
+        //  返回的结果，需要去验证一下，是否完全成功了,
+        if (PermissionUtils.requestPermissionSuccess(grantResults)) {
             // 通过监听接口，告诉外界，已经授权成功
             permissionListener.ganted();
             this.finish();
@@ -82,7 +90,6 @@ public class MyPermissionActivity extends Activity {
         // 如果执行到这里来了，就证明 权限被取消了
         permissionListener.cancel();
         this.finish();
-        return;
     }
 
 

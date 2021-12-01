@@ -13,6 +13,6 @@ public class MyApplication extends Application {
         INSTANCE = this;
         ScreenUtil.init(this);
         registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks.getInstance());
-//        CrashCollectHandler.Companion.getInstance().init(this);
+        //  CrashCollectHandler.Companion.getInstance().init(this);
     }
 }

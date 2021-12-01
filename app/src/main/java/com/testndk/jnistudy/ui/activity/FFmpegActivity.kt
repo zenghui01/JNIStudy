@@ -3,16 +3,19 @@ package com.testndk.jnistudy.ui.activity
 import android.content.Intent
 import android.graphics.Color
 import android.provider.MediaStore
-import android.text.TextUtils
 import android.view.SurfaceView
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.TextView
 import com.testndk.jnistudy.R
 import com.testndk.jnistudy.ui.ffmpeg.FFmpegPlayer
-import com.testndk.jnistudy.utils.LogUtils
-import com.testndk.jnistudy.utils.UriUtil
+import com.testndk.jnistudy.utils.loge
 import com.testndk.jnistudy.utils.toast
-import java.util.*
+
 
 class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
     private var isSeek = false;
@@ -69,8 +72,9 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
 
         }
         tvSelect.setOnClickListener {
-            val i = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(i, REQUEST_CODE_SELECT)
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+            intent.setDataAndType(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "video/*")
+            startActivityForResult(intent, REQUEST_CODE_SELECT)
         }
         mPlayer = FFmpegPlayer()
 //        val filePath = File(
@@ -134,11 +138,12 @@ class FFmpegActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         data?.let {
-            if (requestCode == REQUEST_CODE_SELECT && resultCode == RESULT_OK && null != data) {
-                val uri = data.data
-                LogUtils.eLog(uri, uri)
-                val path = UriUtil.getPath(this, uri)
-                playVideo(path)
+            if (requestCode == REQUEST_CODE_SELECT && resultCode == RESULT_OK) {
+                val uri = it.extras?.get("data") ?: let {
+                    toast("返回数据为空")
+                    return
+                }
+                loge(uri)
             }
         }
     }
