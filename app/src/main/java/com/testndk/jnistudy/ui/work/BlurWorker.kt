@@ -15,6 +15,8 @@ class BlurWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
         fakeBlur(inputData.getInt(TEST_WORKER_KEY_ID, DEFAULT_WORKER_ID))
+        Result.failure()
+        Result.retry()
         return Result.success()
     }
 

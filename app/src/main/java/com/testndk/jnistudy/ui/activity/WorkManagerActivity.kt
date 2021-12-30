@@ -1,6 +1,9 @@
 package com.testndk.jnistudy.ui.activity
 
 import android.view.View
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkContinuation
 import androidx.work.WorkManager
@@ -11,6 +14,7 @@ import com.testndk.jnistudy.ui.work.BlurWorkFour
 import com.testndk.jnistudy.ui.work.BlurWorkOne
 import com.testndk.jnistudy.ui.work.BlurWorkThree
 import com.testndk.jnistudy.ui.work.BlurWorkTwo
+import com.testndk.jnistudy.ui.work.BlurWorker
 import com.testndk.jnistudy.ui.work.TEST_WORKER_KEY_CONTENT
 import com.testndk.jnistudy.ui.work.TEST_WORKER_KEY_ID
 
@@ -28,16 +32,22 @@ class WorkManagerActivity : BaseActivity() {
     fun onClickStartTask(v: View) {
         val data =
             workDataOf(TEST_WORKER_KEY_CONTENT to "hello", TEST_WORKER_KEY_ID to 110)
+//
+//       val data1 =  Data.Builder().put("","").build()
 //        val constraints = Constraints.Builder()
 //            // 设备电池是否应处于可接受的水平以使WorkRequest运行
 //            .setRequiresBatteryNotLow(true)
+//                //
+//            .setRequiresStorageNotLow(true)
 //            // 网络连接状态下执行
 //            .setRequiredNetworkType(NetworkType.CONNECTED)
 //            .build()
+//
 //        val request = OneTimeWorkRequest.Builder(BlurWorker::class.java)
 //            .setInputData(data)
 //            .setConstraints(constraints)
 //            .build()
+//
 //        WorkManager.getInstance(this).run {
 //            enqueue(request)
 //            getWorkInfoByIdLiveData(request.id).observe(this@WorkManagerActivity) { workInfo ->
@@ -46,19 +56,22 @@ class WorkManagerActivity : BaseActivity() {
 //                }
 //            }
 //        }
-
+         // 压缩任务
         val reqOne =
             OneTimeWorkRequest.Builder(BlurWorkOne::class.java).setInputData(data).build()
+        // 压缩
         val reqTwo =
             OneTimeWorkRequest.Builder(BlurWorkTwo::class.java).setInputData(data).build()
-        WorkManager.getInstance(this).beginWith(reqOne).then(reqOne).enqueue()
-
+        WorkManager.getInstance(this).beginWith(reqOne).then(reqTwo).then(reqTwo).enqueue()
+     // 虚化图片
         val reqThree =
             OneTimeWorkRequest.Builder(BlurWorkThree::class.java).setInputData(data)
                 .build()
+        // 裁剪图片的
         val reqFour =
             OneTimeWorkRequest.Builder(BlurWorkFour::class.java).setInputData(data)
                 .build()
+         // 全部上传的
         val reqFive =
             OneTimeWorkRequest.Builder(BlurWorkFive::class.java)
                 .build()

@@ -36,7 +36,7 @@ abstract class BaseWorker(appContext: Context, workerParams: WorkerParameters) :
     }
 
     private suspend fun applyFilter(workerId: Int, string: String?): String {
-        return "$string ${executeTask(workerId)}"
+        return "$string ${executeTask(workerId)} ${Thread.currentThread().name}"
     }
 
     abstract suspend fun executeTask(workerId: Int): String

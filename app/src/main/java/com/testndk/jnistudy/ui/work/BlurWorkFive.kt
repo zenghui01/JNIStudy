@@ -2,14 +2,15 @@ package com.testndk.jnistudy.ui.work
 
 import android.content.Context
 import android.util.Log
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.delay
 
 class BlurWorkFive(appContext: Context, workerParams: WorkerParameters) :
-    BaseWorker(appContext, workerParams) {
+    CoroutineWorker(appContext, workerParams) {
 
-    override suspend fun executeTask(workerId: Int): String {
-        delay(1000)
-        return "BlurWorkFive 执行完毕,workerId: $workerId \n"
+    override suspend fun doWork(): Result {
+        Log.d("BaseWorker",inputData.getStringArray(TEST_WORKER_KEY_CONTENT).contentToString())
+        return Result.success()
     }
 }
