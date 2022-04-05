@@ -41,17 +41,16 @@ class FirstActivity : BaseActivity() {
         }
     }
 
-    private fun start(clazz: Class<*>) {
-        val intent = Intent(this, clazz)
-        this.startActivity(intent);
+    private fun Class<*>.start() {
+        this@FirstActivity.startActivity(Intent(this@FirstActivity, this));
     }
 
     fun onClickAndFix(view: View) {
-        start(MainActivity::class.java)
+        MainActivity::class.java.start()
     }
 
     fun onClickBitmapOption(view: View) {
-        start(BitmapOptionActivity::class.java)
+        BitmapOptionActivity::class.java.start()
     }
 
     fun onClickBsdiff(view: View) {
@@ -60,16 +59,16 @@ class FirstActivity : BaseActivity() {
 
 
     fun onClickFFmpeg(view: View) {
-        start(FFmpegActivity::class.java)
+        FFmpegActivity::class.java.start()
     }
 
     @TestAnnotation
     fun onClickAspectFirst(view: View) {
-        start(TestAspectActivity::class.java)
+        TestAspectActivity::class.java.start()
     }
 
     fun onClickEdit(view: View) {
-        start(EditWeightActivity::class.java)
+        EditWeightActivity::class.java.start()
     }
 
     fun onClickCamera(view: View) {
@@ -82,51 +81,57 @@ class FirstActivity : BaseActivity() {
                 Manifest.permission.CAMERA
             ).subscribe { granted ->
                 if (granted) {
-                    start(CameraActivity::class.java)
+                    CameraActivity::class.java.start()
                 }
             })
         } else {
-            start(CameraActivity::class.java)
+            CameraActivity::class.java.start()
         }
     }
 
     fun onClickLoadGif(view: View) {
-        start(GifActivity::class.java)
+        GifActivity::class.java.start()
     }
 
     fun onClickMergeApk(view: View) {
-        start(BsdiffActivity::class.java)
+        BsdiffActivity::class.java.start()
     }
 
     fun onClickFmod(view: View) {
-        start(FmodActivity::class.java)
+        FmodActivity::class.java.start()
     }
 
     fun onClickRTMP(view: View) {
-        start(RTMPActivity::class.java)
+        RTMPActivity::class.java.start()
     }
 
     fun onClickCastService(view: View) {
-        start(CastServiceActivity::class.java)
+        CastServiceActivity::class.java.start()
     }
 
     fun onclickCastClient(view: View) {
-        start(CastClientActivity::class.java)
+        CastClientActivity::class.java.start()
     }
 
     fun onclickMediaExtra(view: View) {
-        start(VideoCompositionActivity::class.java)
+        VideoCompositionActivity::class.java.start()
     }
 
     fun onclickVideoMixing(view: View) {
-        start(VideoMixingActivity::class.java)
+        VideoMixingActivity::class.java.start()
     }
 
     fun onClickKtor(view: View) {
-        start(KtorActivity::class.java)
+        KtorActivity::class.java.start()
     }
 
     fun onClickWorkManager(view: View) {
-        start(WorkManagerActivity::class.java)
+        TestKotlinApiActivity::class.java.start()
     }
+
+    fun onClickDataStore(view: View) {
+        TestMovePointActivity::class.java.start()
+    }
+
+
 }

@@ -33,29 +33,29 @@ class WorkManagerActivity : BaseActivity() {
         val data =
             workDataOf(TEST_WORKER_KEY_CONTENT to "hello", TEST_WORKER_KEY_ID to 110)
 //
-//       val data1 =  Data.Builder().put("","").build()
-//        val constraints = Constraints.Builder()
-//            // 设备电池是否应处于可接受的水平以使WorkRequest运行
-//            .setRequiresBatteryNotLow(true)
-//                //
-//            .setRequiresStorageNotLow(true)
-//            // 网络连接状态下执行
-//            .setRequiredNetworkType(NetworkType.CONNECTED)
-//            .build()
-//
-//        val request = OneTimeWorkRequest.Builder(BlurWorker::class.java)
-//            .setInputData(data)
-//            .setConstraints(constraints)
-//            .build()
-//
-//        WorkManager.getInstance(this).run {
-//            enqueue(request)
-//            getWorkInfoByIdLiveData(request.id).observe(this@WorkManagerActivity) { workInfo ->
-//                when (workInfo.state) {
-//
-//                }
-//            }
-//        }
+       val data1 =  Data.Builder().put("","").build()
+        val constraints = Constraints.Builder()
+            // 设备电池是否应处于可接受的水平以使WorkRequest运行
+            .setRequiresBatteryNotLow(true)
+                //
+            .setRequiresStorageNotLow(true)
+            // 网络连接状态下执行
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val request = OneTimeWorkRequest.Builder(BlurWorker::class.java)
+            .setInputData(data)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).run {
+            enqueue(request)
+            getWorkInfoByIdLiveData(request.id).observe(this@WorkManagerActivity) { workInfo ->
+                when (workInfo.state) {
+
+                }
+            }
+        }
          // 压缩任务
         val reqOne =
             OneTimeWorkRequest.Builder(BlurWorkOne::class.java).setInputData(data).build()
