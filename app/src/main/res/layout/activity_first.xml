@@ -173,6 +173,7 @@
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
             app:left_text="WorkManager" />
+
         <com.testndk.jnistudy.ui.weight.ColumnView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -181,5 +182,14 @@
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
             app:left_text="DataStore" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickPath"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="PathGroup" />
     </LinearLayout>
 </ScrollView>

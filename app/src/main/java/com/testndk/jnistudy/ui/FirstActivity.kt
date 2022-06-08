@@ -133,5 +133,8 @@ class FirstActivity : BaseActivity() {
         TestMovePointActivity::class.java.start()
     }
 
+    fun onClickPath(view: View) {
+        PathGroupActivity::class.java.start()
+    }
 
 }
