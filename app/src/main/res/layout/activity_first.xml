@@ -191,5 +191,14 @@
             app:bottom_line_margin_size="20dp"
             app:bottom_line_visibility="visible"
             app:left_text="PathGroup" />
+
+        <com.testndk.jnistudy.ui.weight.ColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickOpenGL"
+            app:bottom_line_margin="left"
+            app:bottom_line_margin_size="20dp"
+            app:bottom_line_visibility="visible"
+            app:left_text="OpenGL 绘制三角形" />
     </LinearLayout>
 </ScrollView>

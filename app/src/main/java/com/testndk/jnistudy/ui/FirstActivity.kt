@@ -8,7 +8,25 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import com.testndk.jnistudy.BuildConfig
 import com.testndk.jnistudy.R
 import com.testndk.jnistudy.aspect.annotation.TestAnnotation
-import com.testndk.jnistudy.ui.activity.*
+import com.testndk.jnistudy.ui.activity.BaseActivity
+import com.testndk.jnistudy.ui.activity.BitmapOptionActivity
+import com.testndk.jnistudy.ui.activity.BsdiffActivity
+import com.testndk.jnistudy.ui.activity.CameraActivity
+import com.testndk.jnistudy.ui.activity.CastClientActivity
+import com.testndk.jnistudy.ui.activity.CastServiceActivity
+import com.testndk.jnistudy.ui.activity.EditWeightActivity
+import com.testndk.jnistudy.ui.activity.FFmpegActivity
+import com.testndk.jnistudy.ui.activity.FmodActivity
+import com.testndk.jnistudy.ui.activity.GifActivity
+import com.testndk.jnistudy.ui.activity.KtorActivity
+import com.testndk.jnistudy.ui.activity.MainActivity
+import com.testndk.jnistudy.ui.activity.PathGroupActivity
+import com.testndk.jnistudy.ui.activity.RTMPActivity
+import com.testndk.jnistudy.ui.activity.TestAspectActivity
+import com.testndk.jnistudy.ui.activity.TestKotlinApiActivity
+import com.testndk.jnistudy.ui.activity.VideoCompositionActivity
+import com.testndk.jnistudy.ui.activity.VideoMixingActivity
+import com.testndk.jnistudy.ui.opengl.OpenGLActivity
 import com.testndk.jnistudy.utils.isEquals
 
 class FirstActivity : BaseActivity() {
@@ -135,6 +153,10 @@ class FirstActivity : BaseActivity() {
 
     fun onClickPath(view: View) {
         PathGroupActivity::class.java.start()
+    }
+
+    fun onClickOpenGL(view: View) {
+        OpenGLActivity::class.java.start()
     }
 
 }
