@@ -84,3 +84,7 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 /.idea/jarRepositories.xml
+/.idea/codestream.xml
+/.idea/shelf/Uncommitted_changes_before_Update_at_2022_10_11,_00_06_[Default_Changelist]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Update_at_2022_10_11__00_06__Default_Changelist_.xml
+/.idea/shelf/Uncommitted_changes_before_Update_at_2022_10_11,_00_06_[Default_Changelist]/shelved.patch
