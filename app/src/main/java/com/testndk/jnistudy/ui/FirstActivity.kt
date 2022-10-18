@@ -26,7 +26,7 @@ import com.testndk.jnistudy.ui.activity.TestAspectActivity
 import com.testndk.jnistudy.ui.activity.TestKotlinApiActivity
 import com.testndk.jnistudy.ui.activity.VideoCompositionActivity
 import com.testndk.jnistudy.ui.activity.VideoMixingActivity
-import com.testndk.jnistudy.ui.opengl.OpenGLActivity
+import com.testndk.jnistudy.ui.opengl.one.OpenGLActivity
 import com.testndk.jnistudy.utils.isEquals
 
 class FirstActivity : BaseActivity() {

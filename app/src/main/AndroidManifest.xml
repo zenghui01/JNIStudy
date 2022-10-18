@@ -140,7 +140,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".ui.opengl.OpenGLActivity"
+            android:name=".ui.opengl.one.OpenGLActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 

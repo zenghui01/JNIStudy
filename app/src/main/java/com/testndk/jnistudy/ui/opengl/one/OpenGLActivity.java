@@ -1,4 +1,4 @@
-package com.testndk.jnistudy.ui.opengl;
+package com.testndk.jnistudy.ui.opengl.one;
 
 import android.opengl.GLSurfaceView;
 
@@ -14,6 +14,7 @@ public class OpenGLActivity extends BaseActivity {
 
     private GLSurfaceView glSurfaceView;
 
+    @Override
     public void initView() {
         glSurfaceView = findViewById(R.id.glSurfaceView);
         // GLContext设置OpenGLES2.0

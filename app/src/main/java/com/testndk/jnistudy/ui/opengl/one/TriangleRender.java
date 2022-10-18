@@ -1,4 +1,4 @@
-package com.testndk.jnistudy.ui.opengl;
+package com.testndk.jnistudy.ui.opengl.one;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
