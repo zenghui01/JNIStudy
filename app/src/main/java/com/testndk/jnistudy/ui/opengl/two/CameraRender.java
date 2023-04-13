@@ -2,7 +2,6 @@ package com.testndk.jnistudy.ui.opengl.two;
 
 import android.graphics.SurfaceTexture;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
 import androidx.camera.core.Preview;
 import androidx.lifecycle.LifecycleOwner;
@@ -13,7 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOutputUpdateListener, SurfaceTexture.OnFrameAvailableListener {
     private static final String TAG = "david";
     private CameraView cameraView;
-    private SurfaceTexture mCameraTexure;
+    private SurfaceTexture mCameraTexture;
     private ScreenFilter screenFilter;
     private int[] textures;
     float[] mtx = new float[16];
@@ -27,13 +26,11 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        // surface
         textures = new int[1];
-        // 1
-        // 让 SurfaceTexture   与 Gpu  共享一个数据源  0-31
-        mCameraTexure.attachToGLContext(textures[0]);
+        // 设置共同源
+        mCameraTexture.attachToGLContext(textures[0]);
         // 监听摄像头数据回调，
-        mCameraTexure.setOnFrameAvailableListener(this);
+        mCameraTexture.setOnFrameAvailableListener(this);
         screenFilter = new ScreenFilter(cameraView.getContext());
     }
 
@@ -44,12 +41,11 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        Log.i(TAG, "线程: " + Thread.currentThread().getName());
-        // 摄像头的数据  ---》
-        // 更新摄像头的数据  给了  gpu
-        mCameraTexure.updateTexImage();
-        // 不是数据
-        mCameraTexure.getTransformMatrix(mtx);
+        // 将摄像头的数据更新到 SurfaceTexture 中
+        mCameraTexture.updateTexImage();
+        // 获取 Texture 中的 Matrix
+        mCameraTexture.getTransformMatrix(mtx);
+        // 设置给 screenFilter 中
         screenFilter.setTransformMatrix(mtx);
         // int   数据   byte[]
         screenFilter.onDraw(textures[0]);
@@ -58,8 +54,15 @@ public class CameraRender implements GLSurfaceView.Renderer, Preview.OnPreviewOu
     //
     @Override
     public void onUpdated(Preview.PreviewOutput output) {
-        // 摄像头预览到的数据 在这里
-        mCameraTexure = output.getSurfaceTexture();
+        // 摄像头预览到的数据
+        // 问题来了，我们如何把数据丢给 gpu 进行渲染呢？
+        // attachToGLContext 和 gpu 进行绑定
+        // 调用 attachToGLContext，其实跟 mediacodec 视频硬编码非常类似
+        // mediacodec 再硬编码视频是会提供一个虚拟的 surface，
+        // 输入源（camera、录屏）等等只要在它提供的 surface 上进行渲染，
+        // mediacodec 就能对数据进行编码
+        // attachToGLContext 就提供的是一个共同源
+        mCameraTexture = output.getSurfaceTexture();
     }
 
     @Override

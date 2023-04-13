@@ -27,6 +27,7 @@ import com.testndk.jnistudy.ui.activity.TestKotlinApiActivity
 import com.testndk.jnistudy.ui.activity.VideoCompositionActivity
 import com.testndk.jnistudy.ui.activity.VideoMixingActivity
 import com.testndk.jnistudy.ui.opengl.one.OpenGLActivity
+import com.testndk.jnistudy.ui.opengl.two.OpenGLTwoActivity
 import com.testndk.jnistudy.utils.isEquals
 
 class FirstActivity : BaseActivity() {
@@ -157,6 +158,10 @@ class FirstActivity : BaseActivity() {
 
     fun onClickOpenGL(view: View) {
         OpenGLActivity::class.java.start()
+    }
+
+    fun onClickOpenGLCamera(view: View) {
+        OpenGLTwoActivity::class.java.start()
     }
 
 }
