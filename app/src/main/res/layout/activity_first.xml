@@ -17,197 +17,197 @@
             android:layout_gravity="center"
             android:gravity="center" />
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickAndFix"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="AndFix" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickAndFix"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="AndFix" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickBitmapOption"
-            android:visibility="gone"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="BitmapOption" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickBitmapOption"-->
+<!--            android:visibility="gone"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="BitmapOption" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickEdit"
-            android:visibility="gone"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="地图文字输入控件" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickEdit"-->
+<!--            android:visibility="gone"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="地图文字输入控件" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickBsdiff"
-            android:visibility="gone"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="Bsdiff" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickBsdiff"-->
+<!--            android:visibility="gone"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="Bsdiff" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickAspectFirst"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="Aspectj" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickAspectFirst"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="Aspectj" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickCamera"
-            android:visibility="gone"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="自定义相机" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickCamera"-->
+<!--            android:visibility="gone"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="自定义相机" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickLoadGif"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="Jni 加载 GIF" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickLoadGif"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="Jni 加载 GIF" />-->
 
-        <!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:onClick="onClickMergeApk"-->
-        <!--            app:bottom_line_margin="left"-->
-        <!--            app:bottom_line_margin_size="20dp"-->
-        <!--            app:bottom_line_visibility="visible"-->
-        <!--            app:left_text="增量更新" />-->
+<!--        &lt;!&ndash;        <com.testndk.jnistudy.ui.weight.ColumnView&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:onClick="onClickMergeApk"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bottom_line_margin="left"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bottom_line_margin_size="20dp"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bottom_line_visibility="visible"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:left_text="增量更新" />&ndash;&gt;-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickFmod"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="Fmod 变声" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickFmod"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="Fmod 变声" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickFFmpeg"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="FFmpeg 播放视频" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickFFmpeg"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="FFmpeg 播放视频" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickRTMP"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="FFmpeg + RTMP 推流" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickRTMP"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="FFmpeg + RTMP 推流" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickCastService"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="MediaCodec 投屏服务端" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickCastService"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="MediaCodec 投屏服务端" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onclickCastClient"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="MediaCodec 投屏客户端" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onclickCastClient"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="MediaCodec 投屏客户端" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onclickMediaExtra"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="MediaExtractor 实现视频音频合成" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onclickMediaExtra"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="MediaExtractor 实现视频音频合成" />-->
 
-        <!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:onClick="onclickVideoMixing"-->
-        <!--            app:bottom_line_margin="left"-->
-        <!--            app:bottom_line_margin_size="20dp"-->
-        <!--            app:bottom_line_visibility="visible"-->
-        <!--            app:left_text="MediaExtractor视频音频混音" />-->
+<!--        &lt;!&ndash;        <com.testndk.jnistudy.ui.weight.ColumnView&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:onClick="onclickVideoMixing"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bottom_line_margin="left"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bottom_line_margin_size="20dp"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bottom_line_visibility="visible"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:left_text="MediaExtractor视频音频混音" />&ndash;&gt;-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickKtor"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="Ktor" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickKtor"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="Ktor" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickWorkManager"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="WorkManager" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickWorkManager"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="WorkManager" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickDataStore"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="DataStore" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickDataStore"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="DataStore" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickPath"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="PathGroup" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickPath"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="PathGroup" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickOpenGL"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="OpenGL 绘制三角形" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickOpenGL"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="OpenGL 绘制三角形" />-->
 
-        <com.testndk.jnistudy.ui.weight.ColumnView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickOpenGLCamera"
-            app:bottom_line_margin="left"
-            app:bottom_line_margin_size="20dp"
-            app:bottom_line_visibility="visible"
-            app:left_text="OpenGL 灰色滤镜" />
+<!--        <com.testndk.jnistudy.ui.weight.ColumnView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="onClickOpenGLCamera"-->
+<!--            app:bottom_line_margin="left"-->
+<!--            app:bottom_line_margin_size="20dp"-->
+<!--            app:bottom_line_visibility="visible"-->
+<!--            app:left_text="OpenGL 灰色滤镜" />-->
     </LinearLayout>
 </ScrollView>

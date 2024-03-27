@@ -1,85 +1,57 @@
-package com.testndk.jnistudy.ui.cast;
-
-import android.hardware.display.VirtualDisplay;
-import android.media.MediaCodec;
-import android.media.projection.MediaProjection;
-import android.os.Environment;
-
-import com.testndk.jnistudy.callback.OnProgressListener;
-import com.testndk.jnistudy.utils.LogUtils;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-public class CodecLive extends Thread {
-    public int width = 720;
-    public int height = 1280;
-    public SocketLiveService socketLive;
-    public MediaProjection mediaProjection;
-    public MediaCodec mediaCodec;
-    public VirtualDisplay virtualDisplay;
-    public OnProgressListener listener;
-
-    public boolean isPlay=true;
-
-    public CodecLive(SocketLiveService socketLive, MediaProjection mediaProjection) {
-        this.socketLive = socketLive;
-        this.mediaProjection = mediaProjection;
-    }
-
-    public void startLive() {
-
-    }
-
-    public void setPlay(boolean play) {
-        isPlay = play;
-    }
-
-    public void onProgress(String msg) {
-        if (listener == null) {
-            LogUtils.eLog("回调空了");
-            return;
-        }
-        listener.onProgress(msg + "\n");
-    }
-
-//    public void writeBytes(byte[] array) {
-//        FileOutputStream writer = null;
-//        try {
-//            // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
-//            writer = new FileOutputStream(Environment.getExternalStorageDirectory()+"/codec.h264", true);
-//            writer.write(array);
-//            writer.write('\n');
+//package com.testndk.jnistudy.ui.cast;
 //
+//import android.hardware.display.VirtualDisplay;
+//import android.media.MediaCodec;
+//import android.media.projection.MediaProjection;
+//import android.os.Environment;
 //
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if(writer != null){
-//                    writer.close();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+//import com.testndk.jnistudy.callback.OnProgressListener;
+//import com.testndk.jnistudy.utils.LogUtils;
+//
+//import java.io.FileOutputStream;
+//import java.io.IOException;
+//
+//public class CodecLive extends Thread {
+//    public int width = 720;
+//    public int height = 1280;
+//    public SocketLiveService socketLive;
+//    public MediaProjection mediaProjection;
+//    public MediaCodec mediaCodec;
+//    public VirtualDisplay virtualDisplay;
+//    public OnProgressListener listener;
+//
+//    public boolean isPlay=true;
+//
+//    public CodecLive(SocketLiveService socketLive, MediaProjection mediaProjection) {
+//        this.socketLive = socketLive;
+//        this.mediaProjection = mediaProjection;
 //    }
 //
-//    public String writeContent(byte[] array) {
-//        char[] HEX_CHAR_TABLE = {
-//                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-//        };
-//        StringBuilder sb = new StringBuilder();
-//        for (byte b : array) {
-//            sb.append(HEX_CHAR_TABLE[(b & 0xf0) >> 4]);
-//            sb.append(HEX_CHAR_TABLE[b & 0x0f]);
+//    public void startLive() {
+//
+//    }
+//
+//    public void setPlay(boolean play) {
+//        isPlay = play;
+//    }
+//
+//    public void onProgress(String msg) {
+//        if (listener == null) {
+//            LogUtils.eLog("回调空了");
+//            return;
 //        }
-////        FileWriter writer = null;
+//        listener.onProgress(msg + "\n");
+//    }
+//
+////    public void writeBytes(byte[] array) {
+////        FileOutputStream writer = null;
 ////        try {
 ////            // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
-////            writer = new FileWriter(Environment.getExternalStorageDirectory()+"/codec.txt", true);
-////            writer.write(sb.toString());
-////            writer.write("\n");
+////            writer = new FileOutputStream(Environment.getExternalStorageDirectory()+"/codec.h264", true);
+////            writer.write(array);
+////            writer.write('\n');
+////
+////
 ////        } catch (IOException e) {
 ////            e.printStackTrace();
 ////        } finally {
@@ -91,6 +63,34 @@ public class CodecLive extends Thread {
 ////                e.printStackTrace();
 ////            }
 ////        }
-//        return sb.append("\n").toString();
-//    }
-}
+////    }
+////
+////    public String writeContent(byte[] array) {
+////        char[] HEX_CHAR_TABLE = {
+////                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+////        };
+////        StringBuilder sb = new StringBuilder();
+////        for (byte b : array) {
+////            sb.append(HEX_CHAR_TABLE[(b & 0xf0) >> 4]);
+////            sb.append(HEX_CHAR_TABLE[b & 0x0f]);
+////        }
+//////        FileWriter writer = null;
+//////        try {
+//////            // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
+//////            writer = new FileWriter(Environment.getExternalStorageDirectory()+"/codec.txt", true);
+//////            writer.write(sb.toString());
+//////            writer.write("\n");
+//////        } catch (IOException e) {
+//////            e.printStackTrace();
+//////        } finally {
+//////            try {
+//////                if(writer != null){
+//////                    writer.close();
+//////                }
+//////            } catch (IOException e) {
+//////                e.printStackTrace();
+//////            }
+//////        }
+////        return sb.append("\n").toString();
+////    }
+//}

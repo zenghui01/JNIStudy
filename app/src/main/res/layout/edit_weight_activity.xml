@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.testndk.jnistudy.ui.weight.edit.MapFlashCardEditTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:gravity="center"
-    android:orientation="vertical" />

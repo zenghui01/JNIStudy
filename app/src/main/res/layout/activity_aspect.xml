@@ -19,8 +19,8 @@
         android:onClick="onTestHandler"
         android:text="测试handler" />
 
-    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-        android:id="@+id/ssImg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+<!--    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView-->
+<!--        android:id="@+id/ssImg"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
 </LinearLayout>

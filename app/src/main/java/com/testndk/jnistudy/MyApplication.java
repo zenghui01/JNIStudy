@@ -2,7 +2,7 @@ package com.testndk.jnistudy;
 
 import android.app.Application;
 
-import com.testndk.jnistudy.utils.ScreenUtil;
+//import com.testndk.jnistudy.utils.ScreenUtil;
 
 public class MyApplication extends Application {
     public static MyApplication INSTANCE;
@@ -11,8 +11,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         INSTANCE = this;
-        ScreenUtil.init(this);
-        registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks.getInstance());
+//        ScreenUtil.init(this);
+//        registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks.getInstance());
         //  CrashCollectHandler.Companion.getInstance().init(this);
     }
 }
